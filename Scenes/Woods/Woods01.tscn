@@ -3,7 +3,7 @@
 [ext_resource path="res://Assets/Terrain/woods_01.png" type="Texture" id=1]
 
 [node name="Woods01" type="Node2D"]
-scale = Vector2( 0.75, 0.75 )
+scale = Vector2( 0.5, 0.5 )
 
 [node name="Sprite_Woods01" type="Sprite" parent="."]
 texture = ExtResource( 1 )
