@@ -18,27 +18,28 @@ region_enabled = true
 region_rect = Rect2( 0, 0, 3364, 3364 )
 
 [node name="Woods01" parent="." instance=ExtResource( 2 )]
-position = Vector2( 555.186, 1308.28 )
+position = Vector2( 830.807, 1080.6 )
+rotation = 1.47491
 
 [node name="Woods02" parent="." instance=ExtResource( 3 )]
-position = Vector2( 2738.32, 1797.91 )
+position = Vector2( 2734.33, 1694.05 )
 rotation = -0.991188
 
 [node name="house_01" parent="." instance=ExtResource( 4 )]
-position = Vector2( 1378.1, 1026.59 )
+position = Vector2( 1693.67, 1549.87 )
 rotation = 0.304303
 texture = ExtResource( 5 )
 
 [node name="house_02" parent="." instance=ExtResource( 4 )]
-position = Vector2( 1202.35, 2089.13 )
+position = Vector2( 1026.59, 2580.45 )
 texture = ExtResource( 6 )
 
 [node name="house_04" parent="." instance=ExtResource( 4 )]
-position = Vector2( 1965.3, 1737.61 )
+position = Vector2( 1941.33, 2308.82 )
 rotation = 1.37053
 texture = ExtResource( 7 )
 
 [node name="house_05" parent="." instance=ExtResource( 4 )]
-position = Vector2( 2188.99, 926.726 )
+position = Vector2( 2308.83, 862.814 )
 rotation = -0.6372
 texture = ExtResource( 8 )
