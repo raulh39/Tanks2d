@@ -1,0 +1,10 @@
+[gd_scene format=2]
+
+[node name="house_size_01" type="Sprite"]
+scale = Vector2( 0.5, 0.5 )
+
+[node name="Area_house_size_01" type="Area2D" parent="."]
+collision_layer = 4
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area_house_size_01"]
+polygon = PoolVector2Array( -249.262, -195.014, 247.274, -193.654, 248.635, 194.053, -250.623, 194.053 )
