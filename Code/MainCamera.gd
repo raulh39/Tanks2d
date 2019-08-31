@@ -1,13 +1,13 @@
 extends Camera2D
 
-const MAX_ZOOM_LEVEL = 0.5
-const MIN_ZOOM_LEVEL = 4.18
-const ZOOM_INCREMENT = 0.05
+const MAX_ZOOM_LEVEL: float = 0.5
+const MIN_ZOOM_LEVEL: float = 4.18
+const ZOOM_INCREMENT: float = 0.05
 
-var _current_zoom_level = 4.18
-var _drag = false
+var _current_zoom_level: float = 4.18
+var _drag: bool = false
 
-func _input(event):
+func _input(event: InputEvent) -> void:
     if event.is_action_pressed("cam_drag"):
         _drag = true
     elif event.is_action_released("cam_drag"):
@@ -20,7 +20,7 @@ func _input(event):
         set_offset(get_offset() - event.relative*_current_zoom_level)
 
 
-func _update_zoom(incr, zoom_anchor):
+func _update_zoom(incr: float, zoom_anchor: Vector2) -> void:
     var old_zoom = _current_zoom_level
     _current_zoom_level += incr
     if _current_zoom_level < MAX_ZOOM_LEVEL:
