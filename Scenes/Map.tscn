@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Assets/Terrain/terrain_00_bg.jpg" type="Texture" id=1]
 [ext_resource path="res://Scenes/Woods/Woods01.tscn" type="PackedScene" id=2]
@@ -7,8 +7,7 @@
 [ext_resource path="res://Assets/Buildings/house_02.png" type="Texture" id=5]
 [ext_resource path="res://Assets/Buildings/house_04.png" type="Texture" id=6]
 [ext_resource path="res://Assets/Buildings/house_05.png" type="Texture" id=7]
-[ext_resource path="res://Scenes/Arrow.tscn" type="PackedScene" id=8]
-[ext_resource path="res://Scenes/Woods/Woods03.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Scenes/Woods/Woods03.tscn" type="PackedScene" id=8]
 
 [node name="Map" type="Node2D"]
 
@@ -43,36 +42,6 @@ position = Vector2( 2261.34, 1536.26 )
 rotation = -0.785398
 texture = ExtResource( 7 )
 
-[node name="Arrow" parent="." instance=ExtResource( 8 )]
-position = Vector2( 1636.82, 2.15833 )
-rotation = 1.5708
-
-[node name="Arrow2" parent="." instance=ExtResource( 8 )]
-position = Vector2( 0, 1661.82 )
-
-[node name="Arrow3" parent="." instance=ExtResource( 8 )]
-position = Vector2( 1017.45, 1428.24 )
-rotation = -0.785398
-
-[node name="Arrow4" parent="." instance=ExtResource( 8 )]
-position = Vector2( 1741.89, 1003.69 )
-rotation = 0.785398
-
-[node name="Arrow5" parent="." instance=ExtResource( 8 )]
-position = Vector2( 2087.04, 1714.44 )
-rotation = 2.35619
-
-[node name="Arrow6" parent="." instance=ExtResource( 8 )]
-position = Vector2( 1389.68, 2155.01 )
-rotation = -2.35619
-
-[node name="Arrow7" parent="." instance=ExtResource( 8 )]
-position = Vector2( 1493.98, 2609.27 )
-rotation = 1.5708
-
-[node name="Arrow8" parent="." instance=ExtResource( 8 )]
-position = Vector2( 2579.71, 1494.36 )
-
-[node name="Woods03" parent="." instance=ExtResource( 9 )]
+[node name="Woods03" parent="." instance=ExtResource( 8 )]
 position = Vector2( 1253.27, 3429.02 )
 rotation = 0.650311
