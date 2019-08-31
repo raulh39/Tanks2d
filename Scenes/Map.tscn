@@ -15,7 +15,7 @@
 texture = ExtResource( 1 )
 centered = false
 region_enabled = true
-region_rect = Rect2( 0, 0, 3364, 3364 )
+region_rect = Rect2( 0, 0, 4500, 4500 )
 
 [node name="Woods01" parent="." instance=ExtResource( 2 )]
 position = Vector2( 830.807, 1080.6 )
