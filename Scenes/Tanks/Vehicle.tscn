@@ -5,14 +5,12 @@ _data = {
 "points": PoolVector2Array(  )
 }
 
-[node name="BaseTank" type="Area2D"]
+[node name="Vehicle" type="Area2D"]
 collision_mask = 5
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="HullShape" type="CollisionShape2D" parent="."]
 
-[node name="Path2D" type="Path2D" parent="."]
+[node name="HullBorderPath" type="Path2D" parent="."]
 curve = SubResource( 1 )
 
 [node name="Hull" type="Sprite" parent="."]
-
-[node name="Torret" type="Sprite" parent="Hull"]
