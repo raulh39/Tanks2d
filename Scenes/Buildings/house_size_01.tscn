@@ -1,7 +1,6 @@
 [gd_scene format=2]
 
 [node name="house_size_01" type="Sprite"]
-scale = Vector2( 0.75, 0.75 )
 
 [node name="Area_house_size_01" type="Area2D" parent="."]
 collision_layer = 4
