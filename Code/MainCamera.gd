@@ -4,7 +4,7 @@ const MAX_ZOOM_LEVEL: float = 0.5
 const MIN_ZOOM_LEVEL: float = 4.18
 const ZOOM_INCREMENT: float = 0.05
 
-var _current_zoom_level: float = 4.18
+onready var _current_zoom_level: float = self.zoom.x
 var _drag: bool = false
 
 func _input(event: InputEvent) -> void:
