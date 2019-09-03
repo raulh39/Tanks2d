@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Scenes/Map.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Code/MainCamera.gd" type="Script" id=2]
 [ext_resource path="res://Scenes/Tanks/American/ShermanTank.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/Tanks/German/VeteranTigerTank.tscn" type="PackedScene" id=4]
 
 [node name="Main" type="Node2D"]
 
@@ -29,3 +30,7 @@ rotation = 2.35619
 [node name="ShermanTank_2" parent="." instance=ExtResource( 3 )]
 position = Vector2( 4438.33, 294.953 )
 rotation = 2.35619
+
+[node name="Vehicle" parent="." instance=ExtResource( 4 )]
+position = Vector2( 229.161, 4257.96 )
+rotation = -0.82905
