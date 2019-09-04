@@ -24,11 +24,11 @@ drag_margin_bottom = 0.0
 script = ExtResource( 2 )
 
 [node name="ShermanTank_1" parent="." instance=ExtResource( 3 )]
-position = Vector2( 4233.28, 123.105 )
+position = Vector2( 4027.74, 208.258 )
 rotation = 2.35619
 
 [node name="ShermanTank_2" parent="." instance=ExtResource( 3 )]
-position = Vector2( 4438.33, 294.953 )
+position = Vector2( 4279.77, 412.406 )
 rotation = 2.35619
 
 [node name="Vehicle" parent="." instance=ExtResource( 4 )]
