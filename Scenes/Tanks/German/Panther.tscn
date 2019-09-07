@@ -10,7 +10,7 @@ extents = Vector2( 159.604, 101.104 )
 [node name="Panther" index="0" instance=ExtResource( 1 )]
 tank_name = "Panther"
 point_value = 32
-initiative = 6
+initiative = 7
 attack = 5
 defense = 2
 damage_capacity = 6
