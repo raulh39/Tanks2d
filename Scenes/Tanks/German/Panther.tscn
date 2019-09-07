@@ -7,7 +7,7 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 159.604, 101.104 )
 
-[node name="Vehicle" index="0" instance=ExtResource( 1 )]
+[node name="Panther" index="0" instance=ExtResource( 1 )]
 
 [node name="HullShape" parent="." index="0"]
 shape = SubResource( 1 )
