@@ -8,9 +8,14 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "MarginContainer",
+"class": "Gui",
+"language": "GDScript",
+"path": "res://Scenes/GUI.gd"
+} ]
 _global_script_class_icons={
-
+"Gui": ""
 }
 
 [application]
