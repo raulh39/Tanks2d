@@ -13,9 +13,15 @@ _global_script_classes=[ {
 "class": "Gui",
 "language": "GDScript",
 "path": "res://Scenes/GUI.gd"
+}, {
+"base": "Area2D",
+"class": "Vehicle",
+"language": "GDScript",
+"path": "res://Scenes/Tanks/Vehicle.gd"
 } ]
 _global_script_class_icons={
-"Gui": ""
+"Gui": "",
+"Vehicle": ""
 }
 
 [application]

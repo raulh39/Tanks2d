@@ -1,5 +1,7 @@
 extends Area2D
 
+class_name Vehicle
+
 enum Countries {
 	German,
 	British,
@@ -21,11 +23,34 @@ export (int, 0, 6) var defense
 export (int, 0, 6) var damage_capacity
 export (Array, Abilities) var abilities = []
 
-func _on_Vehicle_mouse_entered():
-	$HullGlow.visible = true
-	$Hull.modulate = Color.yellow
+var has_acted := false
 
+func set_selectable(var selectable: bool) -> void:
+	($HullGlow as CanvasItem).visible = selectable
+
+func _on_Vehicle_mouse_entered():
+	($Hull as CanvasItem).modulate = Color.yellow
 
 func _on_Vehicle_mouse_exited():
-	$HullGlow.visible = false
-	$Hull.modulate = Color.white
+	($Hull as CanvasItem).modulate = Color.white
+
+func move_tank():
+	print("moving")
+	yield(get_tree().create_timer(1), "timeout")
+	print("moved")
+
+func shoot_tank():
+	print("shooting")
+	yield(get_tree().create_timer(1), "timeout")
+	print("shooted")
+
+func command_tank():
+	print("commanding")
+	yield(get_tree().create_timer(1), "timeout")
+	print("commanded")
+
+func total_adjusted_initiative() -> int:
+	var ret :int = initiative*2
+	if country == Countries.German:
+		ret += 1
+	return ret
