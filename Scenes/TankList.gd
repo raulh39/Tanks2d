@@ -38,7 +38,7 @@ func move_tanks() -> void:
 			tank.set_selectable(false)
 
 func shoot_with_tanks() -> void:
-	pass
+	yield(get_tree().create_timer(1), "timeout")
 
 func command_tanks() -> void:
-	pass
+	yield(get_tree().create_timer(1), "timeout")
