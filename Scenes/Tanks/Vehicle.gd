@@ -25,6 +25,8 @@ export (Array, Abilities) var abilities = []
 
 var has_acted := false
 
+var _arrow_scene = preload("res://Scenes/Arrow.tscn")
+
 func set_selectable(var selectable: bool) -> void:
 	($HullGlow as CanvasItem).visible = selectable
 
@@ -36,17 +38,20 @@ func _on_Vehicle_mouse_exited():
 
 func move_tank():
 	print("moving")
-	yield(get_tree().create_timer(1), "timeout")
+	var a: Node2D = _arrow_scene.instance()
+	$HullBorderPath.add_child(a)
+	yield(get_tree().create_timer(10), "timeout")
+	a.queue_free()
 	print("moved")
 
 func shoot_tank():
 	print("shooting")
-	yield(get_tree().create_timer(1), "timeout")
+	yield(get_tree().create_timer(10), "timeout")
 	print("shooted")
 
 func command_tank():
 	print("commanding")
-	yield(get_tree().create_timer(1), "timeout")
+	yield(get_tree().create_timer(10), "timeout")
 	print("commanded")
 
 func total_adjusted_initiative() -> int:
