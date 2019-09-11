@@ -37,11 +37,15 @@ func move_tanks() -> void:
 	_reset_acted()
 	while _more_to_act():
 		var tanks_allowed_to_move := _get_tanks_min_initiative()
-		for t in tanks_allowed_to_move:
-			var tank : Vehicle = (t as Vehicle)
-			tank.set_selectable(true)
-		print("select tank")
-		var t = yield(self, "vehicle_selected")
+		var t
+		if tanks_allowed_to_move.size() > 1:
+			for t in tanks_allowed_to_move:
+				var tank : Vehicle = (t as Vehicle)
+				tank.set_selectable(true)
+			print("select tank")
+			t = yield(self, "vehicle_selected")
+		else:
+			t = tanks_allowed_to_move.front()
 		var tank : Vehicle = (t as Vehicle)
 		yield(tank.move_tank(), "completed")
 		tank.has_acted = true
