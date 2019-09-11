@@ -43,18 +43,18 @@ func move_tank():
 	print("moving")
 	var a: Node2D = _arrow_scene.instance()
 	$HullBorderPath.add_child(a)
-	yield(get_tree().create_timer(10), "timeout")
+	yield(get_tree().create_timer(5), "timeout")
 	a.queue_free()
 	print("moved")
 
 func shoot_tank():
 	print("shooting")
-	yield(get_tree().create_timer(10), "timeout")
+	yield(get_tree().create_timer(5), "timeout")
 	print("shooted")
 
 func command_tank():
 	print("commanding")
-	yield(get_tree().create_timer(10), "timeout")
+	yield(get_tree().create_timer(5), "timeout")
 	print("commanded")
 
 func total_adjusted_initiative() -> int:

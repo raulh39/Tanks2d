@@ -47,9 +47,9 @@ func move_tanks() -> void:
 		else:
 			t = tanks_allowed_to_move.front()
 		var tank : Vehicle = (t as Vehicle)
+		tank.set_selectable(false)
 		yield(tank.move_tank(), "completed")
 		tank.has_acted = true
-		tank.set_selectable(false)
 
 func shoot_with_tanks() -> void:
 	yield(get_tree().create_timer(1), "timeout")
