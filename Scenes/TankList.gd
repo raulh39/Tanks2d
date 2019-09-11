@@ -1,5 +1,14 @@
 extends Node2D
 
+signal vehicle_selected(tank)
+
+func _ready():
+	for t in get_children():
+		(t as Vehicle).connect("vehicle_selected", self, "_vehicle_selected")
+
+func _vehicle_selected(vehicle):
+	emit_signal("vehicle_selected", vehicle)
+
 func _get_tanks_min_initiative() -> Array:
 	var ret := []
 	var min_initiative: int = 1000;
@@ -31,11 +40,12 @@ func move_tanks() -> void:
 		for t in tanks_allowed_to_move:
 			var tank : Vehicle = (t as Vehicle)
 			tank.set_selectable(true)
-		for t in tanks_allowed_to_move:
-			var tank : Vehicle = (t as Vehicle)
-			yield(tank.move_tank(), "completed")
-			tank.has_acted = true
-			tank.set_selectable(false)
+		print("select tank")
+		var t = yield(self, "vehicle_selected")
+		var tank : Vehicle = (t as Vehicle)
+		yield(tank.move_tank(), "completed")
+		tank.has_acted = true
+		tank.set_selectable(false)
 
 func shoot_with_tanks() -> void:
 	yield(get_tree().create_timer(1), "timeout")
