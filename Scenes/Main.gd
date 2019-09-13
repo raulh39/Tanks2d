@@ -8,4 +8,3 @@ func _ready():
 		yield($TankList.shoot_with_tanks(), "completed")
 		$CanvasLayer/GUI.setPhase(Gui.Phases.COMMAND)
 		yield($TankList.command_tanks(), "completed")
-		print("Turn ended")

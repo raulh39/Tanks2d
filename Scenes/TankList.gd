@@ -2,9 +2,12 @@ extends Node2D
 
 signal vehicle_selected(tank)
 
-func _ready():
+func _connect():
 	for t in get_children():
 		(t as Vehicle).connect("vehicle_selected", self, "_vehicle_selected")
+func _disconnect():
+	for t in get_children():
+		(t as Vehicle).disconnect("vehicle_selected", self, "_vehicle_selected")
 
 func _vehicle_selected(vehicle):
 	emit_signal("vehicle_selected", vehicle)
@@ -39,11 +42,11 @@ func move_tanks() -> void:
 		var tanks_allowed_to_move := _get_tanks_min_initiative()
 		var t
 		if tanks_allowed_to_move.size() > 1:
-			for t in tanks_allowed_to_move:
-				var tank : Vehicle = (t as Vehicle)
-				tank.set_selectable(true)
-			print("select tank")
+			for i in tanks_allowed_to_move:
+				(i as Vehicle).set_selectable(true)
+			_connect()
 			t = yield(self, "vehicle_selected")
+			_disconnect()
 		else:
 			t = tanks_allowed_to_move.front()
 		var tank : Vehicle = (t as Vehicle)

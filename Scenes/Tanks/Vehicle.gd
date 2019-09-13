@@ -40,22 +40,17 @@ func _on_Vehicle_mouse_exited():
 	($Hull as CanvasItem).modulate = Color.white
 
 func move_tank():
-	print("moving")
 	var a: Node2D = _arrow_scene.instance()
 	$HullBorderPath.add_child(a)
-	yield(get_tree().create_timer(5), "timeout")
+	yield(get_tree().create_timer(0.5), "timeout")
+	yield(a, "arrow_accepted")
 	a.queue_free()
-	print("moved")
 
 func shoot_tank():
-	print("shooting")
 	yield(get_tree().create_timer(5), "timeout")
-	print("shooted")
 
 func command_tank():
-	print("commanding")
 	yield(get_tree().create_timer(5), "timeout")
-	print("commanded")
 
 func total_adjusted_initiative() -> int:
 	var ret :int = initiative*2
