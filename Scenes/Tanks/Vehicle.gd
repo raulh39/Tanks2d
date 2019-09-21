@@ -28,6 +28,8 @@ var has_acted := false
 var _selectable := false
 var _arrow_scene = preload("res://Scenes/Arrow.tscn")
 
+onready var hull = $Hull
+
 signal vehicle_selected(vehicle)
 
 func set_selectable(var selectable: bool) -> void:

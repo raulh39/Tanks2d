@@ -9,10 +9,12 @@ signal arrow_accepted
 
 enum Status { INACTIVE, POSITIONING_ARROW, POSITIONING_TANK }
 
-enum Positions { STRAIGHT_LEFT, STRAIGHT_RIGHT, ROTATED_LEFT, ROTATED_RIGHT}
-
+enum Positions { LEFT, RIGHT}
+enum Facings { FRONT, SIDE, BACK }
+ 
 var status: int = Status.INACTIVE
-var ghost_position: int = Positions.STRAIGHT_LEFT
+var ghost_position: int = Positions.LEFT
+var ghost_facing: int = Facings.FRONT
 
 var half_arrow_height:int = 30
 var tank
@@ -34,16 +36,16 @@ func _input(event: InputEvent)->void:
 			elif event.is_action("ui_up"):
 				$ArrowSprite/TankShadowSprite.position.x += SHADOW_VELOCITY
 			elif event.is_action_pressed("ui_left"):
-				_change_ghost_position(+1)
+				_change_ghost_position()
 			elif event.is_action_pressed("ui_right"):
-				_change_ghost_position(-1)
+				_change_ghost_facing()
 			elif event.is_action_released("ui_accept"):
 				emit_signal("arrow_accepted")
 
 func move(new_tank)-> void:
 	tank = new_tank
 	$ArrowSprite/TankShadowSprite.texture = tank.ghost_shape
-	$ArrowSprite/TankShadowSprite.modulate = Color(1,1,1,.5)
+	#$ArrowSprite/TankShadowSprite.modulate = Color(1,1,1,.75)
 	half_tank_height = tank.ghost_shape.get_height()/2
 	half_tank_width = tank.ghost_shape.get_width()/2
 	_place_ghost()
@@ -58,29 +60,44 @@ func _move_step() -> void:
 	yield(self, "arrow_accepted")
 	status = Status.POSITIONING_TANK
 	$ArrowSprite/TankShadowSprite.visible = true
+	tank.hull.visible = false
 	yield(self, "arrow_accepted")
+	tank.hull.visible = true
 	tank.global_position = $ArrowSprite/TankShadowSprite.global_position
 	tank.global_rotation = $ArrowSprite/TankShadowSprite.global_rotation
 
-func _change_ghost_position(inc: int) -> void:
-	ghost_position += inc
-	if ghost_position < Positions.STRAIGHT_LEFT:
-		ghost_position = Positions.ROTATED_RIGHT
-	elif ghost_position > Positions.ROTATED_RIGHT:
-		ghost_position = Positions.STRAIGHT_LEFT
+func _change_ghost_facing() -> void:
+	if ghost_facing == Facings.BACK:
+		ghost_facing = Facings.FRONT
+	else:
+		ghost_facing += 1
+	_place_ghost()
+
+func _change_ghost_position() -> void:
+	if ghost_position == Positions.LEFT:
+		ghost_position = Positions.RIGHT
+	else:
+		ghost_position = Positions.LEFT
 	_place_ghost()
 
 func _place_ghost() -> void:
+	var half_tank_dimension: int
+	match ghost_facing:
+		Facings.FRONT:
+			$ArrowSprite/TankShadowSprite.rotation = 0
+			half_tank_dimension = half_tank_height
+		Facings.BACK:
+			$ArrowSprite/TankShadowSprite.rotation = PI
+			half_tank_dimension = half_tank_height
+		Facings.SIDE:
+			if ghost_position == Positions.LEFT:
+				$ArrowSprite/TankShadowSprite.rotation = -PI/2
+			else:
+				$ArrowSprite/TankShadowSprite.rotation = PI/2
+			half_tank_dimension = half_tank_width
+	
 	match ghost_position:
-		Positions.STRAIGHT_LEFT:
-			$ArrowSprite/TankShadowSprite.rotation = 0
-			$ArrowSprite/TankShadowSprite.position.y = -(half_arrow_height + half_tank_height)
-		Positions.STRAIGHT_RIGHT:
-			$ArrowSprite/TankShadowSprite.rotation = 0
-			$ArrowSprite/TankShadowSprite.position.y = +(half_arrow_height + half_tank_height)
-		Positions.ROTATED_LEFT:
-			$ArrowSprite/TankShadowSprite.rotation = +PI/2
-			$ArrowSprite/TankShadowSprite.position.y = 0
-		Positions.ROTATED_RIGHT:
-			$ArrowSprite/TankShadowSprite.rotation = -PI/2
-			$ArrowSprite/TankShadowSprite.position.y = 0
+		Positions.LEFT:
+			$ArrowSprite/TankShadowSprite.position.y = -(half_arrow_height + half_tank_dimension)
+		Positions.RIGHT:
+			$ArrowSprite/TankShadowSprite.position.y = +(half_arrow_height + half_tank_dimension)
