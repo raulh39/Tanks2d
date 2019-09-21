@@ -45,7 +45,6 @@ func move_tank():
 	$HullBorderPath.add_child(a)
 	yield(get_tree().create_timer(0.5), "timeout") #In order to make the mouse click that calls this function not to end the next line "arrow_accepted".
 	yield(a.move(self), "completed")
-	
 	a.queue_free()
 
 func shoot_tank():
@@ -60,6 +59,8 @@ func total_adjusted_initiative() -> int:
 		ret += 1
 	return ret
 
+#warning-ignore:unused_argument
+#warning-ignore:unused_argument
 func _input_event(viewport: Object, event: InputEvent, shape_idx: int) -> void:
 	if not event is InputEventMouseButton:
 		return

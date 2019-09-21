@@ -37,6 +37,8 @@ run/main_scene="res://Scenes/Menu.tscn"
 
 [debug]
 
+gdscript/warnings/unused_variable=false
+gdscript/warnings/unused_class_variable=false
 gdscript/warnings/return_value_discarded=false
 
 [display]
