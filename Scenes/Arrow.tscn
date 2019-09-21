@@ -17,3 +17,5 @@ script = ExtResource( 3 )
 
 [node name="CollisionForArrow" type="CollisionPolygon2D" parent="ArrowSprite/CollisionArea"]
 polygon = PoolVector2Array( 0, -32, 484.889, -30.2222, 485.778, -73.3333, 550.222, 0.444443, 485.333, 72.4444, 484.444, 30.2222, -1.33334, 28 )
+
+[node name="TankShadowSprite" type="Sprite" parent="ArrowSprite"]

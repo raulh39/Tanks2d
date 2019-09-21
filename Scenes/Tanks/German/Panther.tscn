@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scenes/Tanks/Tank.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Assets/Tanks/VeteranTigerTank_topdown.png" type="Texture" id=2]
-[ext_resource path="res://Assets/Tanks/VeteranTigerTank_topdown_glow.png" type="Texture" id=3]
+[ext_resource path="res://Assets/Tanks/VeteranTigerTank_complete.png" type="Texture" id=2]
+[ext_resource path="res://Assets/Tanks/VeteranTigerTank_topdown.png" type="Texture" id=3]
+[ext_resource path="res://Assets/Tanks/VeteranTigerTank_topdown_glow.png" type="Texture" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 159.604, 101.104 )
@@ -20,6 +21,7 @@ attack = 5
 defense = 2
 damage_capacity = 6
 abilities = [ 1 ]
+ghost_shape = ExtResource( 2 )
 
 [node name="HullShape" parent="." index="0"]
 shape = SubResource( 1 )
@@ -28,16 +30,16 @@ shape = SubResource( 1 )
 curve = SubResource( 2 )
 
 [node name="Hull" parent="." index="2"]
-texture = ExtResource( 2 )
+texture = ExtResource( 3 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 329, 207 )
 
 [node name="Turret" parent="Hull" index="0"]
 position = Vector2( -0.0454712, -0.489059 )
-texture = ExtResource( 2 )
+texture = ExtResource( 3 )
 offset = Vector2( 90.3935, 0.489059 )
 region_enabled = true
 region_rect = Rect2( 83, 253, 353, 155 )
 
 [node name="HullGlow" parent="." index="3"]
-texture = ExtResource( 3 )
+texture = ExtResource( 4 )

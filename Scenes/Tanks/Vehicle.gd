@@ -22,6 +22,7 @@ export (int, 0, 6) var attack
 export (int, 0, 6) var defense
 export (int, 0, 6) var damage_capacity
 export (Array, Abilities) var abilities = []
+export (Texture) var ghost_shape
 
 var has_acted := false
 var _selectable := false
@@ -42,8 +43,9 @@ func _on_Vehicle_mouse_exited():
 func move_tank():
 	var a: Node2D = _arrow_scene.instance()
 	$HullBorderPath.add_child(a)
-	yield(get_tree().create_timer(0.5), "timeout")
-	yield(a, "arrow_accepted")
+	yield(get_tree().create_timer(0.5), "timeout") #In order to make the mouse click that calls this function not to end the next line "arrow_accepted".
+	var pos = yield(a.move(ghost_shape), "completed")
+	print("New pos: " + str(pos))
 	a.queue_free()
 
 func shoot_tank():
