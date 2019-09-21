@@ -35,6 +35,10 @@ _global_script_class_icons={
 config/name="Tanks2d"
 run/main_scene="res://Scenes/Menu.tscn"
 
+[debug]
+
+gdscript/warnings/return_value_discarded=false
+
 [display]
 
 window/size/width=1080

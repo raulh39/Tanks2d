@@ -44,8 +44,8 @@ func move_tank():
 	var a: Node2D = _arrow_scene.instance()
 	$HullBorderPath.add_child(a)
 	yield(get_tree().create_timer(0.5), "timeout") #In order to make the mouse click that calls this function not to end the next line "arrow_accepted".
-	var pos = yield(a.move(ghost_shape), "completed")
-	print("New pos: " + str(pos))
+	yield(a.move(self), "completed")
+	
 	a.queue_free()
 
 func shoot_tank():
