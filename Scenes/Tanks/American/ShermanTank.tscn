@@ -31,7 +31,6 @@ shape = SubResource( 1 )
 curve = SubResource( 2 )
 
 [node name="Hull" parent="." index="2"]
-position = Vector2( 0.663422, 0 )
 texture = ExtResource( 3 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 326, 146 )

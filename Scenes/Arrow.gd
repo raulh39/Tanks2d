@@ -63,8 +63,14 @@ func _move_step() -> void:
 	tank.hull.visible = false
 	yield(self, "arrow_accepted")
 	tank.hull.visible = true
-	tank.global_position = $ArrowSprite/TankShadowSprite.global_position
+	var new_pos = $ArrowSprite/TankShadowSprite.global_position
 	tank.global_rotation = $ArrowSprite/TankShadowSprite.global_rotation
+	tank.global_position = new_pos
+	var adjustment = tank.ghost_shape_to_hull_difference
+	print("adjustment: " + str(adjustment))
+	adjustment /= 2
+	print("half adjustment: " + str(adjustment))
+	tank.global_position += adjustment
 
 func _change_ghost_facing() -> void:
 	if ghost_facing == Facings.BACK:

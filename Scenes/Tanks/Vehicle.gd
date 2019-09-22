@@ -29,6 +29,10 @@ var _selectable := false
 var _arrow_scene = preload("res://Scenes/Arrow.tscn")
 
 onready var hull = $Hull
+onready var ghost_shape_to_hull_difference = ghost_shape.get_size() - $Hull.region_rect.size
+
+func _ready():
+	print(tank_name + " ghost_shape_to_hull_difference: " + str(ghost_shape_to_hull_difference))
 
 signal vehicle_selected(vehicle)
 
