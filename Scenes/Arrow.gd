@@ -17,9 +17,12 @@ var ghost_position: int = Positions.LEFT
 var ghost_facing: int = Facings.FRONT
 
 var half_arrow_height:int = 30
-var tank
+var _tank
+var _tank_parent
+var _arrow_parent
 var half_tank_height: int
 var half_tank_width: int
+var _last_offset: float
 
 func _input(event: InputEvent)->void:
 	match status:
@@ -32,78 +35,111 @@ func _input(event: InputEvent)->void:
 				emit_signal("arrow_accepted")
 		Status.POSITIONING_TANK:
 			if event.is_action("ui_down"):
-				$ArrowSprite/TankShadowSprite.position.x -= SHADOW_VELOCITY
+				_tank.position.x -= SHADOW_VELOCITY
 			elif event.is_action("ui_up"):
-				$ArrowSprite/TankShadowSprite.position.x += SHADOW_VELOCITY
+				_tank.position.x += SHADOW_VELOCITY
 			elif event.is_action_pressed("ui_left"):
-				_change_ghost_position()
+				_change_tank_position()
 			elif event.is_action_pressed("ui_right"):
-				_change_ghost_facing()
+				_change_tank_facing()
 			elif event.is_action_released("ui_accept"):
 				emit_signal("arrow_accepted")
 
 func move(new_tank)-> void:
-	tank = new_tank
-	$ArrowSprite/TankShadowSprite.texture = tank.ghost_shape
-	#$ArrowSprite/TankShadowSprite.modulate = Color(1,1,1,.75)
-	half_tank_height = tank.ghost_shape.get_height()/2
-	half_tank_width = tank.ghost_shape.get_width()/2
-	_place_ghost()
+	_tank = new_tank
+	_tank_parent = new_tank.get_parent()
+	_arrow_parent = self.get_parent()
+	half_tank_height = 50 #TODO
+	half_tank_width = 50 #TODO
 	yield(_move_step(), "completed")
 	yield(_move_step(), "completed")
 	status = Status.INACTIVE
-	$ArrowSprite/TankShadowSprite.texture = null
+
+# Initial distribution:
+# _tank_parent (main.tscn)
+#     |
+#   _tank
+#     |
+#  _arrow_parent (_tank.$HullBorderPath)
+#     |       
+#   self
+#     |
+#  $ArrowSprite
+#
+# End distribution
+# _tank_parent (main.tscn)
+#     |
+#   self
+#     |
+#  $ArrowSprite
+#     |
+#   _tank
+#     |
+#  _arrow_parent (_tank.$HullBorderPath)
+func _reparent_tank_under_arrow()->void:
+	var initial_arrow_global_pos = self.global_position
+	_arrow_parent.remove_child(self)
+	_tank_parent.add_child(self)
+	self.global_position = initial_arrow_global_pos
+	
+	_tank_parent.remove_child(_tank)
+	$ArrowSprite.add_child(_tank)
+	_tank.position.x=0
+	_place_tank()
+	_last_offset = self.offset
+
+func _reparent_tank_over_arrow()->void:
+	var initial_tank_global_pos = _tank.global_position
+	var initial_tank_global_rot = _tank.global_rotation
+	$ArrowSprite.remove_child(_tank)
+	_tank_parent.add_child(_tank)
+	_tank.global_rotation = initial_tank_global_rot
+	_tank.global_position = initial_tank_global_pos
+	
+	_tank_parent.remove_child(self)
+	_arrow_parent.add_child(self)
+	self.offset = _last_offset
 
 func _move_step() -> void:
 	status = Status.POSITIONING_ARROW
-	$ArrowSprite/TankShadowSprite.visible = false
 	yield(self, "arrow_accepted")
 	status = Status.POSITIONING_TANK
-	$ArrowSprite/TankShadowSprite.visible = true
-	tank.hull.visible = false
+	_reparent_tank_under_arrow()
 	yield(self, "arrow_accepted")
-	tank.hull.visible = true
-	var new_pos = $ArrowSprite/TankShadowSprite.global_position
-	tank.global_rotation = $ArrowSprite/TankShadowSprite.global_rotation
-	tank.global_position = new_pos
-	var adjustment = tank.ghost_shape_to_hull_difference
-	print("adjustment: " + str(adjustment))
-	adjustment /= 2
-	print("half adjustment: " + str(adjustment))
-	tank.global_position += adjustment
+	_reparent_tank_over_arrow()
 
-func _change_ghost_facing() -> void:
+func _change_tank_facing() -> void:
 	if ghost_facing == Facings.BACK:
 		ghost_facing = Facings.FRONT
 	else:
 		ghost_facing += 1
-	_place_ghost()
+	_place_tank()
 
-func _change_ghost_position() -> void:
+func _change_tank_position() -> void:
 	if ghost_position == Positions.LEFT:
 		ghost_position = Positions.RIGHT
 	else:
 		ghost_position = Positions.LEFT
-	_place_ghost()
+	_place_tank()
 
-func _place_ghost() -> void:
+func _place_tank() -> void:
 	var half_tank_dimension: int
 	match ghost_facing:
 		Facings.FRONT:
-			$ArrowSprite/TankShadowSprite.rotation = 0
+			_tank.rotation = 0
 			half_tank_dimension = half_tank_height
 		Facings.BACK:
-			$ArrowSprite/TankShadowSprite.rotation = PI
+			_tank.rotation = PI
 			half_tank_dimension = half_tank_height
 		Facings.SIDE:
 			if ghost_position == Positions.LEFT:
-				$ArrowSprite/TankShadowSprite.rotation = -PI/2
+				_tank.rotation = -PI/2
 			else:
-				$ArrowSprite/TankShadowSprite.rotation = PI/2
+				_tank.rotation = PI/2
 			half_tank_dimension = half_tank_width
 	
 	match ghost_position:
 		Positions.LEFT:
-			$ArrowSprite/TankShadowSprite.position.y = -(half_arrow_height + half_tank_dimension)
+			_tank.position.y = -(half_arrow_height + half_tank_dimension)
 		Positions.RIGHT:
-			$ArrowSprite/TankShadowSprite.position.y = +(half_arrow_height + half_tank_dimension)
+			_tank.position.y = +(half_arrow_height + half_tank_dimension)
