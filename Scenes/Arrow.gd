@@ -9,15 +9,13 @@ const ARROW_WIDTH:int = 485
 
 signal arrow_accepted
 
-enum Status { INACTIVE, POSITIONING_ARROW, POSITIONING_TANK }
-
-enum Positions { LEFT, RIGHT}
-enum Facings { FRONT, SIDE, BACK }
+enum _Status { INACTIVE, POSITIONING_ARROW, POSITIONING_TANK }
+enum _Positions { LEFT, RIGHT}
+enum _Facings { FRONT, SIDE, BACK }
  
-var status: int = Status.INACTIVE
-var _tank_pos: int = Positions.LEFT
-var _tank_facing: int = Facings.FRONT
-
+var _status: int = _Status.INACTIVE
+var _tank_pos: int = _Positions.LEFT
+var _tank_facing: int = _Facings.FRONT
 var _tank
 var _tank_parent
 var _arrow_parent
@@ -28,15 +26,15 @@ var _max_x:int
 var _min_x:int
 
 func _input(event: InputEvent)->void:
-	match status:
-		Status.POSITIONING_ARROW:
+	match _status:
+		_Status.POSITIONING_ARROW:
 			if event.is_action("ui_down"):
 				unit_offset += VELOCITY
 			elif event.is_action("ui_up"):
 				unit_offset -= VELOCITY
 			elif event.is_action_released("ui_accept"):
 				emit_signal("arrow_accepted")
-		Status.POSITIONING_TANK:
+		_Status.POSITIONING_TANK:
 			if event.is_action("ui_down"):
 				_tank.position.x -= SHADOW_VELOCITY
 				_adjust_tank_x_pos()
@@ -59,7 +57,7 @@ func move(new_tank)-> void:
 	_half_tank_width = tank_size.x/2
 	yield(_move_step(), "completed")
 	yield(_move_step(), "completed")
-	status = Status.INACTIVE
+	_status = _Status.INACTIVE
 
 # Initial distribution:
 # _tank_parent (main.tscn)
@@ -106,25 +104,25 @@ func _reparent_tank_over_arrow()->void:
 	self.offset = _last_offset
 
 func _move_step() -> void:
-	status = Status.POSITIONING_ARROW
+	_status = _Status.POSITIONING_ARROW
 	yield(self, "arrow_accepted")
-	status = Status.POSITIONING_TANK
+	_status = _Status.POSITIONING_TANK
 	_reparent_tank_under_arrow()
 	yield(self, "arrow_accepted")
 	_reparent_tank_over_arrow()
 
 func _change_tank_facing() -> void:
-	if _tank_facing == Facings.BACK:
-		_tank_facing = Facings.FRONT
+	if _tank_facing == _Facings.BACK:
+		_tank_facing = _Facings.FRONT
 	else:
 		_tank_facing += 1
 	_place_tank()
 
 func _change_tank_position() -> void:
-	if _tank_pos == Positions.LEFT:
-		_tank_pos = Positions.RIGHT
+	if _tank_pos == _Positions.LEFT:
+		_tank_pos = _Positions.RIGHT
 	else:
-		_tank_pos = Positions.LEFT
+		_tank_pos = _Positions.LEFT
 	_place_tank()
 
 func _adjust_tank_x_pos()->void:
@@ -134,16 +132,16 @@ func _adjust_tank_x_pos()->void:
 func _place_tank() -> void:
 	var _half_tank_dimension: int
 	match _tank_facing:
-		Facings.FRONT:
+		_Facings.FRONT:
 			_tank.rotation = 0
 			_half_tank_dimension = _half_tank_height
 			_min_x = _half_tank_width
-		Facings.BACK:
+		_Facings.BACK:
 			_tank.rotation = PI
 			_half_tank_dimension = _half_tank_height
 			_min_x = _half_tank_width
-		Facings.SIDE:
-			if _tank_pos == Positions.LEFT:
+		_Facings.SIDE:
+			if _tank_pos == _Positions.LEFT:
 				_tank.rotation = -PI/2
 			else:
 				_tank.rotation = PI/2
@@ -151,9 +149,9 @@ func _place_tank() -> void:
 			_min_x = _half_tank_height
 	
 	match _tank_pos:
-		Positions.LEFT:
+		_Positions.LEFT:
 			_tank.position.y = -(HALF_ARROW_HEIGHT + _half_tank_dimension)
-		Positions.RIGHT:
+		_Positions.RIGHT:
 			_tank.position.y = +(HALF_ARROW_HEIGHT + _half_tank_dimension)
 	
 	_max_x = ARROW_WIDTH - _min_x
