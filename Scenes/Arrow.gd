@@ -49,8 +49,9 @@ func move(new_tank)-> void:
 	_tank = new_tank
 	_tank_parent = new_tank.get_parent()
 	_arrow_parent = self.get_parent()
-	half_tank_height = 50 #TODO
-	half_tank_width = 50 #TODO
+	var tank_size = new_tank.hull.get_rect().size
+	half_tank_height = tank_size.y/2
+	half_tank_width = tank_size.x/2
 	yield(_move_step(), "completed")
 	yield(_move_step(), "completed")
 	status = Status.INACTIVE
