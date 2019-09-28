@@ -44,7 +44,8 @@ func _on_Vehicle_mouse_exited():
 func move_tank():
 	var a: Node2D = _arrow_scene.instance()
 	$HullBorderPath.add_child(a)
-	yield(get_tree().create_timer(0.5), "timeout") #In order to make the mouse click that calls this function not to end the next line "arrow_accepted".
+	a.unit_offset = 0.4
+	yield(get_tree().create_timer(0.1), "timeout") #In order to make the mouse click that calls this function not to end the next line "arrow_accepted".
 	yield(a.move(self), "completed")
 	a.queue_free()
 

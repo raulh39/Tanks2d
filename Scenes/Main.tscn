@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Scenes/Main.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/Map.tscn" type="PackedScene" id=2]
@@ -6,8 +6,7 @@
 [ext_resource path="res://Scenes/GUI.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Scenes/TankList.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scenes/Tanks/American/ShermanTank.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Scenes/Tanks/Vehicle.gd" type="Script" id=7]
-[ext_resource path="res://Scenes/Tanks/German/Panther.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Scenes/Tanks/German/Panther.tscn" type="PackedScene" id=7]
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 1 )
@@ -37,19 +36,13 @@ script = ExtResource( 3 )
 [node name="ShermanTank_1" parent="TankList" instance=ExtResource( 6 )]
 position = Vector2( 4027.74, 208.258 )
 rotation = 2.35619
-collision_mask = 5
-script = ExtResource( 7 )
 tank_name = "Sherman (75 mm) 1"
 
 [node name="ShermanTank_2" parent="TankList" instance=ExtResource( 6 )]
 position = Vector2( 4279.77, 412.406 )
 rotation = 2.35619
-collision_mask = 5
-script = ExtResource( 7 )
 tank_name = "Sherman (75 mm) 2"
 
-[node name="Panther_1" parent="TankList" instance=ExtResource( 8 )]
+[node name="Panther_1" parent="TankList" instance=ExtResource( 7 )]
 position = Vector2( 229.161, 4257.96 )
 rotation = -0.82905
-collision_mask = 5
-script = ExtResource( 7 )
