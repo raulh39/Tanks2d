@@ -4,6 +4,8 @@ class_name Arrow
 
 const VELOCITY := 0.01
 const SHADOW_VELOCITY = 10
+const HALF_ARROW_HEIGHT:int = 30
+const ARROW_WIDTH:int = 485
 
 signal arrow_accepted
 
@@ -13,16 +15,17 @@ enum Positions { LEFT, RIGHT}
 enum Facings { FRONT, SIDE, BACK }
  
 var status: int = Status.INACTIVE
-var ghost_position: int = Positions.LEFT
-var ghost_facing: int = Facings.FRONT
+var _tank_pos: int = Positions.LEFT
+var _tank_facing: int = Facings.FRONT
 
-var half_arrow_height:int = 30
 var _tank
 var _tank_parent
 var _arrow_parent
-var half_tank_height: int
-var half_tank_width: int
+var _half_tank_height: int
+var _half_tank_width: int
 var _last_offset: float
+var _max_x:int
+var _min_x:int
 
 func _input(event: InputEvent)->void:
 	match status:
@@ -36,8 +39,10 @@ func _input(event: InputEvent)->void:
 		Status.POSITIONING_TANK:
 			if event.is_action("ui_down"):
 				_tank.position.x -= SHADOW_VELOCITY
+				_adjust_tank_x_pos()
 			elif event.is_action("ui_up"):
 				_tank.position.x += SHADOW_VELOCITY
+				_adjust_tank_x_pos()
 			elif event.is_action_pressed("ui_left"):
 				_change_tank_position()
 			elif event.is_action_pressed("ui_right"):
@@ -50,8 +55,8 @@ func move(new_tank)-> void:
 	_tank_parent = new_tank.get_parent()
 	_arrow_parent = self.get_parent()
 	var tank_size = new_tank.hull.get_rect().size
-	half_tank_height = tank_size.y/2
-	half_tank_width = tank_size.x/2
+	_half_tank_height = tank_size.y/2
+	_half_tank_width = tank_size.x/2
 	yield(_move_step(), "completed")
 	yield(_move_step(), "completed")
 	status = Status.INACTIVE
@@ -85,7 +90,6 @@ func _reparent_tank_under_arrow()->void:
 	
 	_tank_parent.remove_child(_tank)
 	$ArrowSprite.add_child(_tank)
-	_tank.position.x=0
 	_place_tank()
 	_last_offset = self.offset
 
@@ -110,37 +114,47 @@ func _move_step() -> void:
 	_reparent_tank_over_arrow()
 
 func _change_tank_facing() -> void:
-	if ghost_facing == Facings.BACK:
-		ghost_facing = Facings.FRONT
+	if _tank_facing == Facings.BACK:
+		_tank_facing = Facings.FRONT
 	else:
-		ghost_facing += 1
+		_tank_facing += 1
 	_place_tank()
 
 func _change_tank_position() -> void:
-	if ghost_position == Positions.LEFT:
-		ghost_position = Positions.RIGHT
+	if _tank_pos == Positions.LEFT:
+		_tank_pos = Positions.RIGHT
 	else:
-		ghost_position = Positions.LEFT
+		_tank_pos = Positions.LEFT
 	_place_tank()
 
+func _adjust_tank_x_pos()->void:
+	_tank.position.x = clamp(_tank.position.x, _min_x, _max_x)
+
+
 func _place_tank() -> void:
-	var half_tank_dimension: int
-	match ghost_facing:
+	var _half_tank_dimension: int
+	match _tank_facing:
 		Facings.FRONT:
 			_tank.rotation = 0
-			half_tank_dimension = half_tank_height
+			_half_tank_dimension = _half_tank_height
+			_min_x = _half_tank_width
 		Facings.BACK:
 			_tank.rotation = PI
-			half_tank_dimension = half_tank_height
+			_half_tank_dimension = _half_tank_height
+			_min_x = _half_tank_width
 		Facings.SIDE:
-			if ghost_position == Positions.LEFT:
+			if _tank_pos == Positions.LEFT:
 				_tank.rotation = -PI/2
 			else:
 				_tank.rotation = PI/2
-			half_tank_dimension = half_tank_width
+			_half_tank_dimension = _half_tank_width
+			_min_x = _half_tank_height
 	
-	match ghost_position:
+	match _tank_pos:
 		Positions.LEFT:
-			_tank.position.y = -(half_arrow_height + half_tank_dimension)
+			_tank.position.y = -(HALF_ARROW_HEIGHT + _half_tank_dimension)
 		Positions.RIGHT:
-			_tank.position.y = +(half_arrow_height + half_tank_dimension)
+			_tank.position.y = +(HALF_ARROW_HEIGHT + _half_tank_dimension)
+	
+	_max_x = ARROW_WIDTH - _min_x
+	_adjust_tank_x_pos()
