@@ -49,7 +49,7 @@ func move_tank():
 	var a: Node2D = _arrow_scene.instance()
 	$HullBorderPath.add_child(a)
 	a.unit_offset = 0.4
-	yield(get_tree().create_timer(0.1), "timeout") #In order to make the mouse click that calls this function not to end the next line "arrow_accepted".
+
 	yield(a.move(self), "completed")
 	a.queue_free()
 
@@ -73,7 +73,7 @@ func _input_event(viewport: Object, event: InputEvent, shape_idx: int) -> void:
 	if not _selectable:
 		return
 	var evt : InputEventMouseButton = (event as InputEventMouseButton)
-	if evt.button_index == BUTTON_LEFT and evt.pressed:
+	if evt.button_index == BUTTON_LEFT and not evt.pressed:
         emit_signal("vehicle_selected", self)
 
 

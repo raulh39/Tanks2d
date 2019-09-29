@@ -4,6 +4,7 @@ Learning to program in godot using the fantastic Tanks board game
 
 # TODO
  - [ ] When zoomed, some visual indication should appear in order to know where is the tank you need to move/shoot/command
+ - [ ] Change mouse pointer to a hand when over a selectable object
  - [x] MENU
    - [x] Landing page with start and quit
    - [x] Start should launch main scene
