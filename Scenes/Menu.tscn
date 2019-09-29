@@ -42,7 +42,6 @@ custom_colors/font_color_hover = Color( 1, 1, 0, 1 )
 text = "Quit Game"
 
 [node name="ConfirmationDialog" type="ConfirmationDialog" parent="."]
-visible = true
 margin_left = 268.81
 margin_top = 639.716
 margin_right = 810.81
