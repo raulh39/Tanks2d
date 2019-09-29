@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scenes/Menu.gd" type="Script" id=1]
 [ext_resource path="res://Assets/tanks_menu_screen.jpg" type="Texture" id=2]
@@ -9,6 +9,13 @@ size = 64
 outline_size = 5
 outline_color = Color( 0.235294, 0.180392, 0.180392, 1 )
 font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 25
+font_data = ExtResource( 3 )
+
+[sub_resource type="Theme" id=3]
+default_font = SubResource( 2 )
 
 [node name="Menu" type="Node2D"]
 script = ExtResource( 1 )
@@ -33,5 +40,19 @@ margin_bottom = 820.0
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color_hover = Color( 1, 1, 0, 1 )
 text = "Quit Game"
+
+[node name="ConfirmationDialog" type="ConfirmationDialog" parent="."]
+visible = true
+margin_left = 268.81
+margin_top = 639.716
+margin_right = 810.81
+margin_bottom = 799.716
+theme = SubResource( 3 )
+popup_exclusive = true
+window_title = "Sure to quit?"
+dialog_text = "You are about to leave the best game 
+I've ever made...
+My heart will be broken..."
 [connection signal="pressed" from="New Game" to="." method="_on_New_Game_pressed"]
 [connection signal="pressed" from="Quit Game" to="." method="_on_Quit_Game_pressed"]
+[connection signal="confirmed" from="ConfirmationDialog" to="." method="_on_ConfirmationDialog_confirmed"]
