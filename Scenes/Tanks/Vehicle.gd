@@ -22,8 +22,12 @@ export (int, 0, 6) var attack
 export (int, 0, 6) var defense
 export (int, 0, 6) var damage_capacity
 export (Array, Abilities) var abilities = []
+export var collisioning_color: Color
+export var non_collisioning_color: Color
 
 var has_acted := false
+var overlapping_tank_or_building := false
+
 var _selectable := false
 var _arrow_scene = preload("res://Scenes/Arrow.tscn")
 
@@ -71,3 +75,16 @@ func _input_event(viewport: Object, event: InputEvent, shape_idx: int) -> void:
 	var evt : InputEventMouseButton = (event as InputEventMouseButton)
 	if evt.button_index == BUTTON_LEFT and evt.pressed:
         emit_signal("vehicle_selected", self)
+
+
+func _on_Vehicle_area_entered(area: Area2D):
+	if area.collision_layer == 2: #TODO: 2 is for Woods. Change that magic number
+		return
+	overlapping_tank_or_building = true
+	modulate = collisioning_color
+
+func _on_Vehicle_area_exited(area: Area2D):
+	if area.collision_layer == 2: #TODO: 2 is for Woods. Change that magic number
+		return
+	overlapping_tank_or_building = false
+	modulate = non_collisioning_color

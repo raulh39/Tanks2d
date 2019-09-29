@@ -10,6 +10,8 @@ _data = {
 [node name="Vehicle" type="Area2D"]
 collision_mask = 5
 script = ExtResource( 1 )
+collisioning_color = Color( 1, 0, 0, 1 )
+non_collisioning_color = Color( 1, 1, 1, 1 )
 
 [node name="HullShape" type="CollisionShape2D" parent="."]
 
@@ -20,5 +22,7 @@ curve = SubResource( 1 )
 
 [node name="HullGlow" type="Sprite" parent="."]
 visible = false
+[connection signal="area_entered" from="." to="." method="_on_Vehicle_area_entered"]
+[connection signal="area_exited" from="." to="." method="_on_Vehicle_area_exited"]
 [connection signal="mouse_entered" from="." to="." method="_on_Vehicle_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_Vehicle_mouse_exited"]

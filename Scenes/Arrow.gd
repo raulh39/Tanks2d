@@ -46,7 +46,8 @@ func _input(event: InputEvent)->void:
 			elif event.is_action_pressed("ui_right"):
 				_change_tank_facing()
 			elif event.is_action_released("ui_accept"):
-				emit_signal("arrow_accepted")
+				if not _tank.overlapping_tank_or_building:
+					emit_signal("arrow_accepted")
 
 func move(new_tank)-> void:
 	_tank = new_tank
