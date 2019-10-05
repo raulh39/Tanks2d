@@ -23,5 +23,28 @@ Learning to program in godot using the fantastic Tanks board game
    - [x] Detect invalid tank posistions
    - [x] Capacity to end movement without moving or moving only one
    - [x] Place movement marker
+   - [ ] Hability: Fast (3 movements)
  - [ ] SHOOT PHASE
+   - [ ] Handle tanks initiative order
+   - [ ] Move turret to face selected tank (maybe mouse?)
+   - [ ] Line of sight
+   - [ ] Firing arc
+   - [ ] Pick target
+   - [ ] It should be possible not to fire
+   - [ ] Make roll
+     - [ ] Calculate number of attack dices
+     - [ ] Calculate number of defense dices
+   - [ ] Reroll if stationary
+   - [ ] Cover
+   - [ ] Close range
+   - [ ] Side shot
+   - [ ] Assault gun
+   - [ ] Hability: Coordinated Fire
+   - [ ] Hability: Gung Ho
+   - [ ] Hability: Semi-Indirect Fire
  - [ ] COMMAND PHASE
+   - [ ] Destroy Tanks
+   - [ ] Check For Victory
+   - [ ] Repair Damage / Hability: Blitzkrieg
+   - [ ] Reset the field
+
