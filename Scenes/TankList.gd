@@ -58,4 +58,6 @@ func shoot_with_tanks() -> void:
 	yield(get_tree().create_timer(1), "timeout")
 
 func command_tanks() -> void:
+	for i in get_children():
+		(i as Vehicle).set_movement_token(0)
 	yield(get_tree().create_timer(1), "timeout")
