@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/token_mov_2.jpg-e8d85bd169896e2398c8511da0b1c9ad.stex"
+path="res://.import/token_mov_1.png-23133c1977055626c20e438477ad45e1.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Tokens/token_mov_2.jpg"
-dest_files=[ "res://.import/token_mov_2.jpg-e8d85bd169896e2398c8511da0b1c9ad.stex" ]
+source_file="res://Assets/Tokens/token_mov_1.png"
+dest_files=[ "res://.import/token_mov_1.png-23133c1977055626c20e438477ad45e1.stex" ]
 
 [params]
 
