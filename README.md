@@ -20,7 +20,7 @@ Learning to program in godot using the fantastic Tanks board game
    - [x] Place arrow
    - [x] Reparent tank under arrow & Move tank along arrow
    - [x] Detect invalid tank posistions
-   - [ ] Capacity to end movement without moving or moving only one
+   - [x] Capacity to end movement without moving or moving only one
    - [ ] Place movement marker
  - [ ] SHOOT PHASE
  - [ ] COMMAND PHASE

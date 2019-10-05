@@ -24,6 +24,8 @@ var _half_tank_width: int
 var _last_offset: float
 var _max_x:int
 var _min_x:int
+var _want_to_move:bool
+var _num_moves_done:int
 
 func _input(event: InputEvent)->void:
 	match _status:
@@ -32,6 +34,9 @@ func _input(event: InputEvent)->void:
 				unit_offset += VELOCITY
 			elif event.is_action("ui_up"):
 				unit_offset -= VELOCITY
+			elif event.is_action_released("ui_cancel"):
+				_want_to_move = false
+				emit_signal("arrow_accepted")
 			elif event.is_action_released("ui_accept"):
 				emit_signal("arrow_accepted")
 		_Status.POSITIONING_TANK:
@@ -56,8 +61,11 @@ func move(new_tank)-> void:
 	var tank_size = new_tank.hull.get_rect().size
 	_half_tank_height = tank_size.y/2
 	_half_tank_width = tank_size.x/2
-	yield(_move_step(), "completed")
-	yield(_move_step(), "completed")
+	_want_to_move = true
+	_num_moves_done = 0
+	while _want_to_move and _num_moves_done < 2:
+		yield(_move_step(), "completed")
+		_num_moves_done = _num_moves_done+1
 	_status = _Status.INACTIVE
 
 # Initial distribution:
@@ -107,10 +115,11 @@ func _reparent_tank_over_arrow()->void:
 func _move_step() -> void:
 	_status = _Status.POSITIONING_ARROW
 	yield(self, "arrow_accepted")
-	_status = _Status.POSITIONING_TANK
-	_reparent_tank_under_arrow()
-	yield(self, "arrow_accepted")
-	_reparent_tank_over_arrow()
+	if _want_to_move:
+		_status = _Status.POSITIONING_TANK
+		_reparent_tank_under_arrow()
+		yield(self, "arrow_accepted")
+		_reparent_tank_over_arrow()
 
 func _change_tank_facing() -> void:
 	if _tank_facing == _Facings.BACK:
