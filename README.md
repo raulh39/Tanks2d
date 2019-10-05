@@ -3,6 +3,7 @@
 Learning to program in godot using the fantastic Tanks board game
 
 # TODO
+ - [ ] The window should be resizeable
  - [ ] When zoomed, some visual indication should appear in order to know where is the tank you need to move/shoot/command
  - [ ] Change mouse pointer to a hand when over a selectable object
  - [x] MENU
