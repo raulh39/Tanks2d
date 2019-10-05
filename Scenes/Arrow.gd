@@ -66,6 +66,8 @@ func move(new_tank)-> void:
 	while _want_to_move and _num_moves_done < 2:
 		yield(_move_step(), "completed")
 		_num_moves_done = _num_moves_done+1
+		if _want_to_move:
+			_tank.set_movement_token(_num_moves_done)
 	_status = _Status.INACTIVE
 
 # Initial distribution:

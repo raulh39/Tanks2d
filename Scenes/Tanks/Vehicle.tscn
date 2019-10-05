@@ -1,6 +1,9 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scenes/Tanks/Vehicle.gd" type="Script" id=1]
+[ext_resource path="res://Assets/Tokens/token_mov_1.png" type="Texture" id=2]
+[ext_resource path="res://Assets/Tokens/token_mov_2.png" type="Texture" id=3]
+[ext_resource path="res://Assets/Tokens/token_mov_3.png" type="Texture" id=4]
 
 [sub_resource type="Curve2D" id=1]
 _data = {
@@ -12,6 +15,7 @@ collision_mask = 5
 script = ExtResource( 1 )
 collisioning_color = Color( 1, 0, 0, 1 )
 non_collisioning_color = Color( 1, 1, 1, 1 )
+movement_tokens = [ ExtResource( 2 ), ExtResource( 3 ), ExtResource( 4 ) ]
 
 [node name="HullShape" type="CollisionShape2D" parent="."]
 
@@ -22,6 +26,10 @@ curve = SubResource( 1 )
 
 [node name="HullGlow" type="Sprite" parent="."]
 visible = false
+
+[node name="MovementToken" type="Sprite" parent="."]
+position = Vector2( -220, 0 )
+rotation = 1.5708
 [connection signal="area_entered" from="." to="." method="_on_Vehicle_area_entered"]
 [connection signal="area_exited" from="." to="." method="_on_Vehicle_area_exited"]
 [connection signal="mouse_entered" from="." to="." method="_on_Vehicle_mouse_entered"]

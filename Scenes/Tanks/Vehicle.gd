@@ -24,6 +24,7 @@ export (int, 0, 6) var damage_capacity
 export (Array, Abilities) var abilities = []
 export var collisioning_color: Color
 export var non_collisioning_color: Color
+export (Array, Texture) var movement_tokens = []
 
 var has_acted := false
 var overlapping_tank_or_building := false
@@ -88,3 +89,11 @@ func _on_Vehicle_area_exited(area: Area2D):
 		return
 	overlapping_tank_or_building = false
 	modulate = non_collisioning_color
+
+func set_movement_token(value: int)->void:
+	if value <= 0:
+		$MovementToken.texture = null
+		return
+	if value > movement_tokens.size():
+		return
+	$MovementToken.texture = movement_tokens[value-1]
