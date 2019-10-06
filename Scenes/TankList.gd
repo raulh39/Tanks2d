@@ -12,17 +12,25 @@ func _disconnect():
 func _vehicle_selected(vehicle):
 	emit_signal("vehicle_selected", vehicle)
 
-func _get_tanks_min_initiative() -> Array:
+static func lt(x:int , y: int) -> bool:
+    return x < y
+
+static func gt(x:int , y: int) -> bool:
+    return x > y
+
+func _get_tanks_by_initiative() -> Array:
 	var ret := []
-	var min_initiative: int = 1000;
+	var ret_initiative: int
+	var one_children_found: bool = false
 	for i in get_children():
 		assert(i is Vehicle)
 		var child: Vehicle = (i as Vehicle)
 		if not child.has_acted:
-			if child.total_adjusted_initiative() < min_initiative:
+			if not one_children_found or child.total_adjusted_initiative() < ret_initiative:
+				one_children_found = true
 				ret = [ child ]
-				min_initiative = child.total_adjusted_initiative()
-			elif child.total_adjusted_initiative() == min_initiative:
+				ret_initiative = child.total_adjusted_initiative()
+			elif child.total_adjusted_initiative() == ret_initiative:
 				ret.append(child)
 	return ret
 
@@ -36,21 +44,31 @@ func _more_to_act() -> bool:
 			return true
 	return false
 
+func _select(tanks_allowed_to_move: Array)->void:
+	for i in tanks_allowed_to_move:
+		(i as Vehicle).set_selectable(true)
+	_connect()
+	var vehicle = yield(self, "vehicle_selected")
+	_disconnect()
+	return vehicle
+
+func _get_next_tank():
+	var tanks_allowed_to_move := _get_tanks_by_initiative()
+	var tank: Vehicle
+	if tanks_allowed_to_move.size() > 1:
+		tank = yield(_select(tanks_allowed_to_move), "completed") as Vehicle
+	else:
+		#If this branch doesn't yield, the returned object is not a corroutine and the code doesn't works
+		#so we have to fake a yield.
+		yield(get_tree().create_timer(0.05), "timeout")
+		tank = tanks_allowed_to_move.front() as Vehicle
+	tank.set_selectable(false)
+	return tank
+
 func move_tanks() -> void:
 	_reset_acted()
 	while _more_to_act():
-		var tanks_allowed_to_move := _get_tanks_min_initiative()
-		var t
-		if tanks_allowed_to_move.size() > 1:
-			for i in tanks_allowed_to_move:
-				(i as Vehicle).set_selectable(true)
-			_connect()
-			t = yield(self, "vehicle_selected")
-			_disconnect()
-		else:
-			t = tanks_allowed_to_move.front()
-		var tank : Vehicle = (t as Vehicle)
-		tank.set_selectable(false)
+		var tank:Vehicle = yield(_get_next_tank(), "completed")
 		yield(tank.move_tank(), "completed")
 		tank.has_acted = true
 
