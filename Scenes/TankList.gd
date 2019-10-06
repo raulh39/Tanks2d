@@ -18,7 +18,7 @@ static func lt(x:int , y: int) -> bool:
 static func gt(x:int , y: int) -> bool:
     return x > y
 
-func _get_tanks_by_initiative() -> Array:
+func _get_tanks_by_initiative(comparator: FuncRef) -> Array:
 	var ret := []
 	var ret_initiative: int
 	var one_children_found: bool = false
@@ -26,7 +26,7 @@ func _get_tanks_by_initiative() -> Array:
 		assert(i is Vehicle)
 		var child: Vehicle = (i as Vehicle)
 		if not child.has_acted:
-			if not one_children_found or child.total_adjusted_initiative() < ret_initiative:
+			if not one_children_found or comparator.call_func(child.total_adjusted_initiative(), ret_initiative):
 				one_children_found = true
 				ret = [ child ]
 				ret_initiative = child.total_adjusted_initiative()
@@ -52,8 +52,8 @@ func _select(tanks_allowed_to_move: Array)->void:
 	_disconnect()
 	return vehicle
 
-func _get_next_tank():
-	var tanks_allowed_to_move := _get_tanks_by_initiative()
+func _get_next_tank(comparator: FuncRef):
+	var tanks_allowed_to_move := _get_tanks_by_initiative(comparator)
 	var tank: Vehicle
 	if tanks_allowed_to_move.size() > 1:
 		tank = yield(_select(tanks_allowed_to_move), "completed") as Vehicle
@@ -68,12 +68,16 @@ func _get_next_tank():
 func move_tanks() -> void:
 	_reset_acted()
 	while _more_to_act():
-		var tank:Vehicle = yield(_get_next_tank(), "completed")
+		var tank:Vehicle = yield(_get_next_tank(funcref(self, "lt")), "completed")
 		yield(tank.move_tank(), "completed")
 		tank.has_acted = true
 
 func shoot_with_tanks() -> void:
-	yield(get_tree().create_timer(1), "timeout")
+	_reset_acted()
+	while _more_to_act():
+		var tank:Vehicle = yield(_get_next_tank(funcref(self, "gt")), "completed")
+		yield(tank.shoot_tank(), "completed")
+		tank.has_acted = true
 
 func command_tanks() -> void:
 	for i in get_children():

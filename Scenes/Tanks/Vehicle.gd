@@ -55,6 +55,7 @@ func move_tank():
 	a.queue_free()
 
 func shoot_tank():
+	print("SHOOOOOOT")
 	yield(get_tree().create_timer(5), "timeout")
 
 func command_tank():
