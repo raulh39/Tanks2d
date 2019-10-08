@@ -58,7 +58,7 @@ func _get_next_tank(comparator: FuncRef):
 	if tanks_allowed_to_move.size() > 1:
 		tank = yield(_select(tanks_allowed_to_move), "completed") as Vehicle
 	else:
-		#If this branch doesn't yield, the returned object is not a corroutine and the code doesn't works
+		#If this branch doesn't yield, the returned object is not a coroutine and the code doesn't works
 		#so we have to fake a yield.
 		yield(get_tree().create_timer(0.05), "timeout")
 		tank = tanks_allowed_to_move.front() as Vehicle

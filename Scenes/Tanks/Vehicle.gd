@@ -30,6 +30,7 @@ var has_acted := false
 var overlapping_tank_or_building := false
 
 var _selectable := false
+var _targetable := false
 var _arrow_scene = preload("res://Scenes/Arrow.tscn")
 
 onready var hull = $Hull
@@ -39,6 +40,10 @@ signal vehicle_selected(vehicle)
 func set_selectable(var selectable: bool) -> void:
 	($HullGlow as CanvasItem).visible = selectable
 	_selectable = selectable
+
+func set_targetable(var targetable: bool) -> void:
+	($HullGlow as CanvasItem).visible = targetable
+	_targetable = targetable
 
 func _on_Vehicle_mouse_entered():
 	($Hull as CanvasItem).modulate = Color.yellow
