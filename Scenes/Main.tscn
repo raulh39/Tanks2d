@@ -49,4 +49,4 @@ position = Vector2( 229.161, 4257.96 )
 rotation = -0.82905
 
 [node name="TargetCross" parent="." instance=ExtResource( 8 )]
-position = Vector2( 3936.24, 296.302 )
+position = Vector2( 4026.03, 196.906 )
