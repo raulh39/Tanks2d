@@ -69,6 +69,10 @@ func move_tank():
 	yield(a.move(self), "completed")
 	a.queue_free()
 
+func mark_shooting(is_shooting: bool)->void:
+	if $Hull.get_child_count() > 0 and $Hull.get_child(0) is Turret:
+		$Hull.get_child(0).shooting = is_shooting
+	
 func shoot_tank(target_tank: Vehicle):
 	print("SHOOOOOOT to " + str(target_tank))
 	yield(get_tree().create_timer(5), "timeout")

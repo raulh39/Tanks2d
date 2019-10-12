@@ -31,7 +31,7 @@ Learning to program in godot using the fantastic Tanks board game
    - [x] Handle tanks initiative order
    - [x] Pick target
    - [ ] When waiting to select tank, some visual message should appear
-   - [ ] Move turret to face selected tank (maybe mouse?)
+   - [x] Move turret to face selected tank (maybe mouse?)
    - [ ] Line of sight
    - [ ] Firing arc
    - [ ] It should be possible not to fire
