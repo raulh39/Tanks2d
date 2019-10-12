@@ -26,12 +26,14 @@ Learning to program in godot using the fantastic Tanks board game
    - [x] Capacity to end movement without moving or moving only one
    - [x] Place movement marker
    - [ ] Hability: Fast (3 movements)
+   - [ ] When waiting to select tank, some visual message should appear
  - [ ] SHOOT PHASE
-   - [ ] Handle tanks initiative order
+   - [x] Handle tanks initiative order
+   - [x] Pick target
+   - [ ] When waiting to select tank, some visual message should appear
    - [ ] Move turret to face selected tank (maybe mouse?)
    - [ ] Line of sight
    - [ ] Firing arc
-   - [ ] Pick target
    - [ ] It should be possible not to fire
    - [ ] Make roll
      - [ ] Calculate number of attack dices

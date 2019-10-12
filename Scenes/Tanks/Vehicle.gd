@@ -31,7 +31,9 @@ var overlapping_tank_or_building := false
 
 var _selectable := false
 var _targetable := false
+var _my_target_cross
 var _arrow_scene = preload("res://Scenes/Arrow.tscn")
+var _target_cross_scene = preload("res://Scenes/TargetCross.tscn")
 
 onready var hull = $Hull
 
@@ -44,6 +46,15 @@ func set_selectable(var selectable: bool) -> void:
 func set_targetable(var targetable: bool) -> void:
 	($HullGlow as CanvasItem).visible = targetable
 	_targetable = targetable
+	if targetable:
+		_my_target_cross = _target_cross_scene.instance()
+		_my_target_cross.global_position = self.global_position
+		_my_target_cross.global_rotation = 0
+		get_parent().add_child(_my_target_cross)
+	else:
+		get_parent().remove_child(_my_target_cross)
+		_my_target_cross.queue_free()
+		_my_target_cross = null
 
 func _on_Vehicle_mouse_entered():
 	($Hull as CanvasItem).modulate = Color.yellow
@@ -59,8 +70,8 @@ func move_tank():
 	yield(a.move(self), "completed")
 	a.queue_free()
 
-func shoot_tank():
-	print("SHOOOOOOT")
+func shoot_tank(target_tank: Vehicle):
+	print("SHOOOOOOT to " + str(target_tank))
 	yield(get_tree().create_timer(5), "timeout")
 
 func command_tank():
@@ -77,7 +88,7 @@ func total_adjusted_initiative() -> int:
 func _input_event(viewport: Object, event: InputEvent, shape_idx: int) -> void:
 	if not event is InputEventMouseButton:
 		return
-	if not _selectable:
+	if not _selectable and not _targetable:
 		return
 	var evt : InputEventMouseButton = (event as InputEventMouseButton)
 	if evt.button_index == BUTTON_LEFT and not evt.pressed:

@@ -65,6 +65,23 @@ func _get_next_tank(comparator: FuncRef):
 	tank.set_selectable(false)
 	return tank
 
+func _set_targetable_tanks(shooting_country: int, targetable: bool) -> void:
+	for i in get_children():
+		if i is Vehicle:
+			var v := (i as Vehicle)
+			if v.country != shooting_country:
+				v.set_targetable(targetable)
+				if targetable:
+					v.connect("vehicle_selected", self, "_vehicle_selected")
+				else:
+					v.disconnect("vehicle_selected", self, "_vehicle_selected")
+
+func _get_target_tank(shooting_country: int) -> void:
+	_set_targetable_tanks(shooting_country, true)
+	var vehicle = yield(self, "vehicle_selected")
+	_set_targetable_tanks(shooting_country, false)
+	return vehicle
+	
 func move_tanks() -> void:
 	_reset_acted()
 	while _more_to_act():
@@ -75,9 +92,10 @@ func move_tanks() -> void:
 func shoot_with_tanks() -> void:
 	_reset_acted()
 	while _more_to_act():
-		var tank:Vehicle = yield(_get_next_tank(funcref(self, "gt")), "completed")
-		yield(tank.shoot_tank(), "completed")
-		tank.has_acted = true
+		var shooting_tank:Vehicle = yield(_get_next_tank(funcref(self, "gt")), "completed")
+		var target_tank:Vehicle = yield(_get_target_tank(shooting_tank.country), "completed")
+		yield(shooting_tank.shoot_tank(target_tank), "completed")
+		shooting_tank.has_acted = true
 
 func command_tanks() -> void:
 	for i in get_children():
