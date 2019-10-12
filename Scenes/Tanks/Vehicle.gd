@@ -44,7 +44,6 @@ func set_selectable(var selectable: bool) -> void:
 	_selectable = selectable
 
 func set_targetable(var targetable: bool) -> void:
-	($HullGlow as CanvasItem).visible = targetable
 	_targetable = targetable
 	if targetable:
 		_my_target_cross = _target_cross_scene.instance()
