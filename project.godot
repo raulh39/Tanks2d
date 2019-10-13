@@ -40,6 +40,7 @@ _global_script_class_icons={
 
 config/name="Tanks2d"
 run/main_scene="res://Scenes/Menu.tscn"
+config/icon="res://Assets/icon.png"
 
 [debug]
 
