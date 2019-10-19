@@ -27,7 +27,7 @@ export var non_collisioning_color: Color
 export (Array, Texture) var movement_tokens = []
 
 var has_acted := false
-var overlapping_tank_or_building := false
+var _overlapping_tank_or_building := 0
 
 var _selectable := false
 var _targetable := false
@@ -101,14 +101,15 @@ func _input_event(viewport: Object, event: InputEvent, shape_idx: int) -> void:
 func _on_Vehicle_area_entered(area: Area2D):
 	if area.collision_layer == 2: #TODO: 2 is for Woods. Change that magic number
 		return
-	overlapping_tank_or_building = true
+	_overlapping_tank_or_building += 1
 	modulate = collisioning_color
 
 func _on_Vehicle_area_exited(area: Area2D):
 	if area.collision_layer == 2: #TODO: 2 is for Woods. Change that magic number
 		return
-	overlapping_tank_or_building = false
-	modulate = non_collisioning_color
+	_overlapping_tank_or_building -= 1
+	if _overlapping_tank_or_building==0:
+		modulate = non_collisioning_color
 
 func set_movement_token(value: int)->void:
 	if value <= 0:
@@ -117,3 +118,6 @@ func set_movement_token(value: int)->void:
 	if value > movement_tokens.size():
 		return
 	$MovementToken.texture = movement_tokens[value-1]
+
+func is_overlapping()->bool:
+	return _overlapping_tank_or_building != 0
