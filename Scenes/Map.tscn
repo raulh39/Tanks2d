@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Assets/Terrain/frame_horz.jpg" type="Texture" id=1]
 [ext_resource path="res://Assets/Terrain/terrain_00_bg.jpg" type="Texture" id=2]
@@ -9,6 +9,12 @@
 [ext_resource path="res://Assets/Buildings/house_04.png" type="Texture" id=7]
 [ext_resource path="res://Assets/Buildings/house_05.png" type="Texture" id=8]
 [ext_resource path="res://Scenes/Woods/Woods03.tscn" type="PackedScene" id=9]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 150, 100 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 25, 500 )
 
 [node name="Map" type="Node2D"]
 
@@ -53,3 +59,39 @@ texture = ExtResource( 8 )
 [node name="Woods03" parent="." instance=ExtResource( 9 )]
 position = Vector2( 1253.27, 3429.02 )
 rotation = 0.650311
+
+[node name="TopFrame" type="Area2D" parent="."]
+position = Vector2( 0, -6.021 )
+collision_layer = 4
+
+[node name="TopFrameCollision" type="CollisionShape2D" parent="TopFrame"]
+position = Vector2( 2400, -450 )
+scale = Vector2( 19.88, 4.52 )
+shape = SubResource( 1 )
+
+[node name="BottomFrame" type="Area2D" parent="."]
+position = Vector2( 0, 5400 )
+collision_layer = 4
+
+[node name="BottomFrameCollision" type="CollisionShape2D" parent="BottomFrame"]
+position = Vector2( 2400, -450 )
+scale = Vector2( 19.88, 4.52 )
+shape = SubResource( 1 )
+
+[node name="LeftFrame" type="Area2D" parent="."]
+position = Vector2( -3134.33, 2598.32 )
+collision_layer = 4
+
+[node name="LeftFrameCollision" type="CollisionShape2D" parent="LeftFrame"]
+position = Vector2( 2638.25, -338.382 )
+scale = Vector2( 19.88, 4.52 )
+shape = SubResource( 2 )
+
+[node name="RightFrame" type="Area2D" parent="."]
+position = Vector2( 2356.88, 2600.91 )
+collision_layer = 4
+
+[node name="RightFrameCollision" type="CollisionShape2D" parent="RightFrame"]
+position = Vector2( 2638.25, -338.382 )
+scale = Vector2( 19.88, 4.52 )
+shape = SubResource( 2 )
