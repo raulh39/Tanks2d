@@ -14,6 +14,7 @@ const ZOOM_INCREMENT: float = 0.05
 
 func _ready():
 	MAX_ZOOM_LEVEL = (4500+500+500) / OS.window_size.y
+	zoom = Vector2(MAX_ZOOM_LEVEL, MAX_ZOOM_LEVEL)
 
 var _drag: bool = false
 

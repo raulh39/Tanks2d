@@ -44,7 +44,6 @@ custom_colors/font_color_hover = Color( 1, 1, 0, 1 )
 text = "Quit Game"
 
 [node name="ConfirmationDialog" type="ConfirmationDialog" parent="."]
-visible = true
 margin_right = 542.0
 margin_bottom = 160.0
 theme = SubResource( 3 )

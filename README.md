@@ -3,10 +3,7 @@
 Learning to program in godot using the fantastic Tanks board game
 
 # TODO
- - [ ] The window should be resizeable
-   - [ ] Detect window size change
-   - [ ] Split screen in two: a square board and a rectangular panel to fill the border. In the panel the info is displayed
-   - [ ] Support for screens with larger vertical than horizontal size (?)
+ - [x] Fullscreen window
  - [ ] When zoomed, some visual indication should appear in order to know where is the tank you need to move/shoot/command
  - [ ] Change mouse pointer to a hand when over a selectable object
  - [ ] Use static typing in all the code
