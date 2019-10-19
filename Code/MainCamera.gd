@@ -1,12 +1,19 @@
 extends Camera2D
 
 func clamp_offset() -> void:
-		offset.x = clamp(offset.x, limit_left, limit_right  - OS.window_size.x * zoom.x)
-		offset.y = clamp(offset.y, limit_top,  limit_bottom - OS.window_size.y * zoom.y)
+		offset.x = clamp(offset.x, -500, limit_right  - OS.window_size.x * zoom.x+500)
+		offset.y = clamp(offset.y, -500, limit_bottom - OS.window_size.y * zoom.y+500)
+#	if zoom.x < MAX_ZOOM_LEVEL:
+#	else:
+#		offset.x = 0
+#		offset.y = 0
 
 const MIN_ZOOM_LEVEL: float = 0.5
-const MAX_ZOOM_LEVEL: float = 4500.0/1080.0 #(limit_right-limit_left)/OS.window_size.x
+var MAX_ZOOM_LEVEL: float
 const ZOOM_INCREMENT: float = 0.05
+
+func _ready():
+	MAX_ZOOM_LEVEL = (4500+500+500) / OS.window_size.y
 
 var _drag: bool = false
 

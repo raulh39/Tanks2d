@@ -1,47 +1,55 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
-[ext_resource path="res://Assets/Terrain/terrain_00_bg.jpg" type="Texture" id=1]
-[ext_resource path="res://Scenes/Woods/Woods01.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Scenes/Buildings/house_size_01.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Assets/Buildings/house_01.png" type="Texture" id=4]
-[ext_resource path="res://Assets/Buildings/house_02.png" type="Texture" id=5]
-[ext_resource path="res://Assets/Buildings/house_04.png" type="Texture" id=6]
-[ext_resource path="res://Assets/Buildings/house_05.png" type="Texture" id=7]
-[ext_resource path="res://Scenes/Woods/Woods03.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Assets/Terrain/frame_horz.jpg" type="Texture" id=1]
+[ext_resource path="res://Assets/Terrain/terrain_00_bg.jpg" type="Texture" id=2]
+[ext_resource path="res://Scenes/Woods/Woods01.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/Buildings/house_size_01.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Assets/Buildings/house_01.png" type="Texture" id=5]
+[ext_resource path="res://Assets/Buildings/house_02.png" type="Texture" id=6]
+[ext_resource path="res://Assets/Buildings/house_04.png" type="Texture" id=7]
+[ext_resource path="res://Assets/Buildings/house_05.png" type="Texture" id=8]
+[ext_resource path="res://Scenes/Woods/Woods03.tscn" type="PackedScene" id=9]
 
 [node name="Map" type="Node2D"]
 
-[node name="Background" type="Sprite" parent="."]
+[node name="WoodenFrame" type="Sprite" parent="."]
+position = Vector2( -2800, -2800 )
 texture = ExtResource( 1 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 15000, 10000 )
+
+[node name="Background" type="Sprite" parent="."]
+texture = ExtResource( 2 )
 centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 4500, 4500 )
 
-[node name="Woods01" parent="." instance=ExtResource( 2 )]
+[node name="Woods01" parent="." instance=ExtResource( 3 )]
 position = Vector2( 3589.05, 1302.28 )
 rotation = 1.0134
 scale = Vector2( 1, 1 )
 
-[node name="house_01" parent="." instance=ExtResource( 3 )]
+[node name="house_01" parent="." instance=ExtResource( 4 )]
 position = Vector2( 862.762, 1622.12 )
-rotation = -0.785398
-texture = ExtResource( 4 )
-
-[node name="house_02" parent="." instance=ExtResource( 3 )]
-position = Vector2( 1597.68, 876.94 )
 rotation = -0.785398
 texture = ExtResource( 5 )
 
-[node name="house_04" parent="." instance=ExtResource( 3 )]
-position = Vector2( 1530.97, 2291.2 )
+[node name="house_02" parent="." instance=ExtResource( 4 )]
+position = Vector2( 1597.68, 876.94 )
 rotation = -0.785398
 texture = ExtResource( 6 )
 
-[node name="house_05" parent="." instance=ExtResource( 3 )]
-position = Vector2( 2261.34, 1536.26 )
+[node name="house_04" parent="." instance=ExtResource( 4 )]
+position = Vector2( 1530.97, 2291.2 )
 rotation = -0.785398
 texture = ExtResource( 7 )
 
-[node name="Woods03" parent="." instance=ExtResource( 8 )]
+[node name="house_05" parent="." instance=ExtResource( 4 )]
+position = Vector2( 2261.34, 1536.26 )
+rotation = -0.785398
+texture = ExtResource( 8 )
+
+[node name="Woods03" parent="." instance=ExtResource( 9 )]
 position = Vector2( 1253.27, 3429.02 )
 rotation = 0.650311
