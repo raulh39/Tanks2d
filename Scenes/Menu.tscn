@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://Scenes/Menu.gd" type="Script" id=1]
+[ext_resource path="res://Code/Menu.gd" type="Script" id=1]
 [ext_resource path="res://Assets/tanks_menu_screen.jpg" type="Texture" id=2]
 [ext_resource path="res://Assets/Fonts/Xolonium-Regular.ttf" type="DynamicFontData" id=3]
 

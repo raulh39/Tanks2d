@@ -12,12 +12,12 @@ _global_script_classes=[ {
 "base": "PathFollow2D",
 "class": "Arrow",
 "language": "GDScript",
-"path": "res://Scenes/Arrow.gd"
+"path": "res://Code/Arrow.gd"
 }, {
 "base": "MarginContainer",
 "class": "Gui",
 "language": "GDScript",
-"path": "res://Scenes/GUI.gd"
+"path": "res://Code/GUI.gd"
 }, {
 "base": "Sprite",
 "class": "Turret",

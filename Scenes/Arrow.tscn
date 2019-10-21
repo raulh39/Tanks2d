@@ -1,8 +1,9 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://Scenes/Arrow.gd" type="Script" id=1]
+[ext_resource path="res://Code/Arrow.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Arrow_01.png" type="Texture" id=2]
-[ext_resource path="res://Scenes/ArrowSprite.gd" type="Script" id=3]
+[ext_resource path="res://Code/ArrowSprite.gd" type="Script" id=3]
+
 
 [node name="Arrow" type="PathFollow2D"]
 script = ExtResource( 1 )
