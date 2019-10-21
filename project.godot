@@ -22,12 +22,12 @@ _global_script_classes=[ {
 "base": "Sprite",
 "class": "Turret",
 "language": "GDScript",
-"path": "res://Scenes/Tanks/Turret.gd"
+"path": "res://Code/Turret.gd"
 }, {
 "base": "Area2D",
 "class": "Vehicle",
 "language": "GDScript",
-"path": "res://Scenes/Tanks/Vehicle.gd"
+"path": "res://Code/Vehicle.gd"
 } ]
 _global_script_class_icons={
 "Arrow": "",
