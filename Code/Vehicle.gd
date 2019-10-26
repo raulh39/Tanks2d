@@ -75,7 +75,9 @@ func mark_shooting(is_shooting: bool)->void:
 	
 func shoot_tank(target_tank: Vehicle):
 	print("SHOOOOOOT to " + str(target_tank))
-	print("target_tank.get_rect(): ", target_tank.get_rect(), " position: ", target_tank.get_rect().position, " end: ", target_tank.get_rect().end)
+	var rect := target_tank.get_rect()
+	print("target_tank.get_rect(): ", rect, " position: ", rect.position, " end: ", rect.end, " global_position: ", target_tank.global_position)
+	print("firing point: ", $FiringPoint.global_position)
 	yield(get_tree().create_timer(5), "timeout")
 
 func command_tank():
