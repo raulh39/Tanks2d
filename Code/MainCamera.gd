@@ -1,18 +1,18 @@
 extends Camera2D
 
-func clamp_position() -> void:
+func clamp_offset() -> void:
 	var pixels_shown_by_camera := OS.window_size * zoom
 	print("pixels_shown_by_camera: ", pixels_shown_by_camera)
-	print("prev position: ", position)
+	print("prev offset: ", offset)
 	if pixels_shown_by_camera.x < 5500:
-		position.x = clamp(position.x, -500, 5000 - pixels_shown_by_camera.x)
+		offset.x = clamp(offset.x, -500, 5000 - pixels_shown_by_camera.x)
 	else:
-		position.x = (4500 - pixels_shown_by_camera.x)/2
+		offset.x = (4500 - pixels_shown_by_camera.x)/2
 	if pixels_shown_by_camera.y < 5500:
-		position.y = clamp(position.y, -500, 5000 - pixels_shown_by_camera.y)
+		offset.y = clamp(offset.y, -500, 5000 - pixels_shown_by_camera.y)
 	else:
-		position.y = (4500 - pixels_shown_by_camera.y)/2
-	print("post position: ", position)
+		offset.y = (4500 - pixels_shown_by_camera.y)/2
+	print("post offset: ", offset)
 
 const MIN_ZOOM_LEVEL: float = 0.5
 var MAX_ZOOM_LEVEL: float
@@ -21,7 +21,7 @@ const ZOOM_INCREMENT: float = 0.05
 func _ready():
 	MAX_ZOOM_LEVEL = (4500+500+500) / OS.window_size.y
 	zoom = Vector2(MAX_ZOOM_LEVEL, MAX_ZOOM_LEVEL)
-	clamp_position()
+	clamp_offset()
 
 var _drag: bool = false
 
@@ -35,8 +35,8 @@ func _input(event: InputEvent) -> void:
 	elif event.is_action("cam_zoom_out"):
 		_update_zoom(ZOOM_INCREMENT)
 	elif event is InputEventMouseMotion && _drag:
-		position -= Vector2(event.relative.x*zoom.x, event.relative.y*zoom.y)
-		clamp_position()
+		offset -= Vector2(event.relative.x*zoom.x, event.relative.y*zoom.y)
+		clamp_offset()
 
 
 func _update_zoom(incr: float) -> void:
@@ -47,9 +47,9 @@ func _update_zoom(incr: float) -> void:
 	if new_zoom == zoom:
 		return
 	
-	var old_mp := get_local_mouse_position()
+	var old_mp := get_global_mouse_position()
 	zoom = new_zoom
-	var new_mp := get_local_mouse_position()
+	var new_mp := get_global_mouse_position()
 	var diff := new_mp - old_mp
-	position -= diff
-	clamp_position()
+	offset -= diff
+	clamp_offset()
