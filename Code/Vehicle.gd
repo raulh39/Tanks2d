@@ -75,6 +75,7 @@ func mark_shooting(is_shooting: bool)->void:
 	
 func shoot_tank(target_tank: Vehicle):
 	print("SHOOOOOOT to " + str(target_tank))
+	print("target_tank.get_rect(): ", target_tank.get_rect(), " position: ", target_tank.get_rect().position, " end: ", target_tank.get_rect().end)
 	yield(get_tree().create_timer(5), "timeout")
 
 func command_tank():
@@ -121,3 +122,6 @@ func set_movement_token(value: int)->void:
 
 func is_overlapping()->bool:
 	return _overlapping_tank_or_building != 0
+
+func get_rect()->Rect2:
+	return $Hull.get_rect()

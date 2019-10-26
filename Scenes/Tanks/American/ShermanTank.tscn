@@ -12,7 +12,7 @@ _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, -162, -73, 0, 0, 0, 0, 162, -73, 0, 0, 0, 0, 162, 73, 0, 0, 0, 0, -162, 73, 0, 0, 0, 0, -162, -73 )
 }
 
-[node name="ShermanTank" instance=ExtResource( 1 )]
+[node name="ShermanTank" index="0" instance=ExtResource( 1 )]
 tank_name = "Sherman (75 mm)"
 country = 2
 point_value = 20

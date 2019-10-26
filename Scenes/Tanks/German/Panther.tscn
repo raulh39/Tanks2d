@@ -12,7 +12,7 @@ _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, -154, -100, 0, 0, 0, 0, 159, -100, 0, 0, 0, 0, 159, 100, 0, 0, 0, 0, -154, 100, 0, 0, 0, 0, -154, -100 )
 }
 
-[node name="Panther" instance=ExtResource( 1 )]
+[node name="Panther" index="0" instance=ExtResource( 1 )]
 tank_name = "Panther"
 point_value = 32
 initiative = 7
@@ -33,9 +33,8 @@ region_enabled = true
 region_rect = Rect2( 0, 0, 329, 207 )
 
 [node name="Turret" parent="Hull" index="0"]
-position = Vector2( -0.0454712, -0.489059 )
 texture = ExtResource( 2 )
-offset = Vector2( 90.3935, 0.489059 )
+offset = Vector2( 90.394, -8.5 )
 region_enabled = true
 region_rect = Rect2( 83, 253, 353, 155 )
 
