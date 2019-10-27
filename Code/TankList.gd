@@ -2,6 +2,12 @@ extends Node2D
 
 signal vehicle_selected(tank)
 
+func _ready():
+	for i in get_children():
+		if i is Vehicle:
+			var v := (i as Vehicle)
+			v.connect("vehicle_selected", self, "_vehicle_selected")
+
 #------------------
 # Tanks come into play in initiative order. In the movement phase they go from 
 # lower initiative to higher but in the shooting phase they go from higher to 
@@ -76,11 +82,9 @@ func _get_next_group_to_act(comparator: FuncRef) -> Array:
 func _select(tanks_allowed_to_act: Array)->void:
 	for i in tanks_allowed_to_act:
 		(i as Vehicle).set_selectable(true)
-		(i as Vehicle).connect("vehicle_selected", self, "_vehicle_selected")
 	var vehicle = yield(self, "vehicle_selected")
 	for i in tanks_allowed_to_act:
 		(i as Vehicle).set_selectable(false)
-		(i as Vehicle).disconnect("vehicle_selected", self, "_vehicle_selected")
 	return vehicle
 
 func _vehicle_selected(vehicle):
@@ -118,10 +122,6 @@ func _set_targetable_tanks(shooting_tank:Vehicle, targetable: bool) -> void:
 			var v := (i as Vehicle)
 			if v.country != shooting_tank.country:
 				v.set_targetable(targetable)
-				if targetable:
-					v.connect("vehicle_selected", self, "_vehicle_selected")
-				else:
-					v.disconnect("vehicle_selected", self, "_vehicle_selected")
 
 func _input(event: InputEvent)->void:
 	if _waiting_to_select_target and event.is_action_released("ui_cancel"):
