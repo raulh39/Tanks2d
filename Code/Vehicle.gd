@@ -39,6 +39,18 @@ onready var hull = $Hull
 
 signal vehicle_selected(vehicle)
 
+#-------------------------------------------
+# Mouse in/out functions
+#-------------------------------------------
+func _on_Vehicle_mouse_entered():
+	($Hull as CanvasItem).modulate = Color.yellow
+
+func _on_Vehicle_mouse_exited():
+	($Hull as CanvasItem).modulate = Color.white
+
+#-------------------------------------------
+# Functions dealing with tank state (selecting, targeting and shooting)
+#-------------------------------------------
 func set_selectable(var selectable: bool) -> void:
 	($HullGlow as CanvasItem).visible = selectable
 	_selectable = selectable
@@ -55,40 +67,57 @@ func set_targetable(var targetable: bool) -> void:
 		_my_target_cross.queue_free()
 		_my_target_cross = null
 
-func _on_Vehicle_mouse_entered():
-	($Hull as CanvasItem).modulate = Color.yellow
+func set_shooting(is_shooting: bool)->void:
+	if $Hull.get_child_count() > 0 and $Hull.get_child(0) is Turret:
+		$Hull.get_child(0).shooting = is_shooting
 
-func _on_Vehicle_mouse_exited():
-	($Hull as CanvasItem).modulate = Color.white
-
+#-------------------------------------------
+# Move
+#-------------------------------------------
 func move_tank():
 	var a: Node2D = _arrow_scene.instance()
 	$HullBorderPath.add_child(a)
-	a.unit_offset = 0.4
-
+	a.unit_offset = 0.4 #So the arrow appeard in the from side
 	yield(a.move(self), "completed")
 	a.queue_free()
 
-func mark_shooting(is_shooting: bool)->void:
-	if $Hull.get_child_count() > 0 and $Hull.get_child(0) is Turret:
-		$Hull.get_child(0).shooting = is_shooting
-	
+#-------------------------------------------
+# Shoot
+#-------------------------------------------
 func shoot_tank(target_tank: Vehicle):
-	print("SHOOOOOOT to " + str(target_tank))
 	var rect := target_tank.get_rect()
-	print("target_tank.get_rect(): ", rect, " position: ", rect.position, " end: ", rect.end, " global_position: ", target_tank.global_position)
-	print("firing point: ", $FiringPoint.global_position)
 	yield(get_tree().create_timer(5), "timeout")
 
+#-------------------------------------------
+# Command
+#-------------------------------------------
 func command_tank():
 	yield(get_tree().create_timer(5), "timeout")
 
+
+#-------------------------------------------
+# Functions called from other Nodes
+#-------------------------------------------
 func total_adjusted_initiative() -> int:
 	var ret :int = initiative*2
 	if country == Countries.German:
 		ret += 1
 	return ret
 
+func set_movement_token(value: int)->void:
+	if value <= 0:
+		$MovementToken.texture = null
+		return
+	if value > movement_tokens.size():
+		return
+	$MovementToken.texture = movement_tokens[value-1]
+
+func get_rect()->Rect2:
+	return $Hull.get_rect()
+
+#-------------------------------------------
+# Handling of mouse click
+#-------------------------------------------
 #warning-ignore:unused_argument
 #warning-ignore:unused_argument
 func _input_event(viewport: Object, event: InputEvent, shape_idx: int) -> void:
@@ -100,30 +129,21 @@ func _input_event(viewport: Object, event: InputEvent, shape_idx: int) -> void:
 	if evt.button_index == BUTTON_LEFT and not evt.pressed:
         emit_signal("vehicle_selected", self)
 
+#-------------------------------------------
+# Handling of overlapping (used by Arrow.gd)
+#-------------------------------------------
+func is_overlapping()->bool:
+	return _overlapping_tank_or_building != 0
 
-func _on_Vehicle_area_entered(area: Area2D):
+func _on_Vehicle_area_entered(area: Area2D) -> void:
 	if area.collision_layer == 2: #TODO: 2 is for Woods. Change that magic number
 		return
 	_overlapping_tank_or_building += 1
 	modulate = collisioning_color
 
-func _on_Vehicle_area_exited(area: Area2D):
+func _on_Vehicle_area_exited(area: Area2D) -> void:
 	if area.collision_layer == 2: #TODO: 2 is for Woods. Change that magic number
 		return
 	_overlapping_tank_or_building -= 1
 	if _overlapping_tank_or_building==0:
 		modulate = non_collisioning_color
-
-func set_movement_token(value: int)->void:
-	if value <= 0:
-		$MovementToken.texture = null
-		return
-	if value > movement_tokens.size():
-		return
-	$MovementToken.texture = movement_tokens[value-1]
-
-func is_overlapping()->bool:
-	return _overlapping_tank_or_building != 0
-
-func get_rect()->Rect2:
-	return $Hull.get_rect()

@@ -94,9 +94,9 @@ func shoot_with_tanks() -> void:
 	_reset_acted()
 	while _more_to_act():
 		var shooting_tank:Vehicle = yield(_select_tank_by_initiative(funcref(self, "gt")), "completed")
-		shooting_tank.mark_shooting(true)
+		shooting_tank.set_shooting(true)
 		var target_tank:Vehicle = yield(_select_target_tank(shooting_tank), "completed")
-		shooting_tank.mark_shooting(false)
+		shooting_tank.set_shooting(false)
 		yield(shooting_tank.shoot_tank(target_tank), "completed")
 		shooting_tank.has_acted = true
 
