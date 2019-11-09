@@ -107,6 +107,7 @@ func set_targetable(shooting_tank:Vehicle) -> void:
 	#Look at _physics_process() for the code
 	#executed after this
 
+#warning-ignore:unused_argument
 func _physics_process(delta):
 	if not _tank_that_want_to_shoot_us:
 		return
@@ -127,28 +128,41 @@ func _calculate_target_status(shooting_tank:Vehicle) -> int:
 	if not line_of_sight: return TargetStatus.NotVisible
 	return TargetStatus.Visible
 
-func _calculate_line_of_sight(shooting_tank:Vehicle) -> bool:
-	var extents :Vector2 = $HullShape.shape.extents - Vector2(5,5)
-	var extents_pos = [
-	    position+extents.rotated(rotation),
-		position+(extents*Vector2(-1,-1)).rotated(rotation),
-		position+(extents*Vector2(1,-1)).rotated(rotation),
-		position+(extents*Vector2(-1,1)).rotated(rotation)
-	]
-	var min_pos := position
-	var max_pos := position
-	var min_angle := (position - shooting_tank.position).angle()
+static func _get_extents(origin_position:Vector2, target_position:Vector2, target_extents :Vector2, target_rotation: float) -> Dictionary:
+	var ret := {
+		min_pos=target_position,
+		max_pos=target_position
+	}
+	var min_angle := (target_position - origin_position).angle()
 	var max_angle := min_angle
+	var extents_pos = [
+	    target_position+target_extents.rotated(target_rotation),
+		target_position+(target_extents*Vector2(-1,-1)).rotated(target_rotation),
+		target_position+(target_extents*Vector2(1,-1)).rotated(target_rotation),
+		target_position+(target_extents*Vector2(-1,1)).rotated(target_rotation)
+	]
 	for p in extents_pos:
-		var ang := ((p as Vector2) - shooting_tank.position).angle()
+		var ang := ((p as Vector2) - origin_position).angle()
 		if ang < min_angle:
 			min_angle = ang
-			min_pos = p
+			ret.min_pos = p
 		if ang > max_angle:
 			max_angle = ang
-			max_pos = p
+			ret.max_pos = p
+	return ret
+
+static func _get_positions_between(min_pos: Vector2, max_pos: Vector2) -> Array:
+	var dir = max_pos - min_pos
+	var ret = []
+	for i in range(0, 20):
+		ret.append(min_pos+dir*(i/20.0))
+	ret.append(max_pos)
+	return ret
+
+func _calculate_line_of_sight(shooting_tank:Vehicle) -> bool:
+	var extents_pos := _get_extents(shooting_tank.position, position, $HullShape.shape.extents - Vector2(5,5), rotation)
 	var has_los:=false
-	for target_pos in [min_pos,max_pos]:
+	for target_pos in _get_positions_between(extents_pos.min_pos, extents_pos.max_pos):
 		var direct_space_state := get_world_2d().direct_space_state
 		var collision := direct_space_state.intersect_ray(shooting_tank.position, target_pos, [shooting_tank], collision_mask, true, true)
 		if collision.collider == self:
@@ -159,7 +173,8 @@ func _calculate_line_of_sight(shooting_tank:Vehicle) -> bool:
 func _draw_vision_line(global_dest_position: Vector2) -> void:
 	var new_line := Line2D.new()
 	new_line.default_color = Color(1,1,0, .3)
-	add_child(new_line)
+	add_child_below_node($HullShape, new_line)
+	#add_child(new_line)
 	new_line.add_point(Vector2())
 	new_line.add_point((global_dest_position - global_position).rotated(-rotation))
 
@@ -183,7 +198,7 @@ func move_tank():
 # Shoot
 #-------------------------------------------
 func shoot_tank(target_tank: Vehicle):
-	var time_out := 1
+	var time_out := 1.0
 	if not target_tank:
 		time_out = 0.05
 	yield(get_tree().create_timer(time_out), "timeout")
