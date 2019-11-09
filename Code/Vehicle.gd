@@ -30,7 +30,6 @@ var has_acted := false
 var _overlapping_tank_or_building := 0
 
 var _selectable := false
-var _targetable := false
 var _my_target_cross
 var _arrow_scene = preload("res://Scenes/Arrow.tscn")
 var _target_cross_scene = preload("res://Scenes/TargetCross.tscn")
@@ -55,22 +54,76 @@ func set_selectable(var selectable: bool) -> void:
 	($HullGlow as CanvasItem).visible = selectable
 	_selectable = selectable
 
-func set_targetable(var targetable: bool) -> void:
-	_targetable = targetable
-	if targetable:
-		_my_target_cross = _target_cross_scene.instance()
-		_my_target_cross.global_position = self.global_position
-		_my_target_cross.global_rotation = 0
-		get_parent().add_child(_my_target_cross)
-	else:
-		get_parent().remove_child(_my_target_cross)
-		_my_target_cross.queue_free()
-		_my_target_cross = null
-
 func set_shooting(is_shooting: bool)->void:
 	if $Hull.get_child_count() > 0 and $Hull.get_child(0) is Turret:
 		$Hull.get_child(0).shooting = is_shooting
 
+
+#-------------------------------------------
+# Being shoot related functions.
+# We need to calculate if the shooting tank has line of 
+# sight (LoS) to ourselves. We want to use RayCast for 
+# that. But the raycast functions can only be used in 
+# the physic thread, that is, in the _physics_process() 
+# function.
+# So when sombody is trying to target ourselves, we 
+# store the shooting tank in the variable 
+# _tank_that_want_to_shoot_us.
+# The _physics_process() will return inmediately if this
+# variable is null, but if the variable is not null it:
+#   - will do all the raycasting 
+#   - will set some variables to represent the result of
+#      the raycast (not visible, in-cover or visible)
+#   - will set _tank_that_want_to_shoot_us to null in 
+#      order to not recalculate again the same values
+#-------------------------------------------
+
+var _tank_that_want_to_shoot_us:Vehicle = null
+
+enum TargetStatus {
+	NotShooting,
+	NotVisible,
+	InCover,
+	Visible
+}
+
+var _target_status = TargetStatus.NotShooting
+
+func unset_targetable()-> void:
+	match _target_status:
+		TargetStatus.NotShooting:
+			return
+		TargetStatus.NotVisible:
+			return
+		TargetStatus.InCover:
+			pass #TODO
+		TargetStatus.Visible:
+			get_parent().remove_child(_my_target_cross)
+			_my_target_cross.queue_free()
+			_my_target_cross = null
+
+func set_targetable(shooting_tank:Vehicle) -> void:
+	_tank_that_want_to_shoot_us = shooting_tank
+	#Look at _physics_process() for the code
+	#executed after this
+
+func _physics_process(delta):
+	if not _tank_that_want_to_shoot_us:
+		return
+	_target_status = _calculate_target_status(_tank_that_want_to_shoot_us)
+	_tank_that_want_to_shoot_us = null
+	match _target_status:
+		TargetStatus.InCover:
+			pass #TODO
+		TargetStatus.Visible:	
+			_my_target_cross = _target_cross_scene.instance()
+			_my_target_cross.global_position = self.global_position
+			_my_target_cross.global_rotation = 0
+			get_parent().add_child(_my_target_cross)
+			_tank_that_want_to_shoot_us=null
+
+func _calculate_target_status(shooting_tank:Vehicle) -> int:
+	return TargetStatus.Visible
 #-------------------------------------------
 # Move
 #-------------------------------------------
@@ -93,7 +146,6 @@ func shoot_tank(target_tank: Vehicle):
 #-------------------------------------------
 func command_tank():
 	yield(get_tree().create_timer(5), "timeout")
-
 
 #-------------------------------------------
 # Functions called from other Nodes
@@ -123,11 +175,11 @@ func get_rect()->Rect2:
 func _input_event(viewport: Object, event: InputEvent, shape_idx: int) -> void:
 	if not event is InputEventMouseButton:
 		return
-	if not _selectable and not _targetable:
+	if not _selectable and _target_status != TargetStatus.Visible and _target_status != TargetStatus.InCover:
 		return
 	var evt : InputEventMouseButton = (event as InputEventMouseButton)
 	if evt.button_index == BUTTON_LEFT and not evt.pressed:
-        emit_signal("vehicle_selected", self)
+		emit_signal("vehicle_selected", self)
 
 #-------------------------------------------
 # Handling of overlapping (used by Arrow.gd)

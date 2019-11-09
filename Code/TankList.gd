@@ -12,7 +12,7 @@ func _ready():
 # Tanks come into play in initiative order. In the movement phase they go from 
 # lower initiative to higher but in the shooting phase they go from higher to 
 # lower.
-# As Godot still hasn't lambdas, we must make two static functions, "gt" and 
+# As Godot still hasn't got lambdas, we must make two static functions, "gt" and 
 # "lt" just to order the tanks in one way or the other.
 #------------------
 static func lt(x:int , y: int) -> bool:
@@ -108,7 +108,11 @@ func shoot_with_tanks() -> void:
 #Needed to handle input "ui_cancel"
 var _waiting_to_select_target: bool
 
-func _select_target_tank(shooting_tank:Vehicle) -> void:
+func _input(event: InputEvent)->void:
+	if _waiting_to_select_target and event.is_action_released("ui_cancel"):
+		emit_signal("vehicle_selected", null)
+
+func _select_target_tank(shooting_tank:Vehicle) -> Vehicle:
 	_set_targetable_tanks(shooting_tank, true)
 	_waiting_to_select_target = true
 	var vehicle = yield(self, "vehicle_selected")
@@ -121,11 +125,10 @@ func _set_targetable_tanks(shooting_tank:Vehicle, targetable: bool) -> void:
 		if i is Vehicle:
 			var v := (i as Vehicle)
 			if v.country != shooting_tank.country:
-				v.set_targetable(targetable)
-
-func _input(event: InputEvent)->void:
-	if _waiting_to_select_target and event.is_action_released("ui_cancel"):
-		emit_signal("vehicle_selected", null)
+				if targetable:
+					v.set_targetable(shooting_tank)
+				else:
+					v.unset_targetable()
 
 #-----------------------------------------
 # Tanks command
