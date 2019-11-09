@@ -129,14 +129,26 @@ func _calculate_target_status(shooting_tank:Vehicle) -> int:
 
 func _calculate_line_of_sight(shooting_tank:Vehicle) -> bool:
 	var extents :Vector2 = $HullShape.shape.extents - Vector2(5,5)
-	var has_los:=false
-	var pos_to_test = [
-	    position,
+	var extents_pos = [
 	    position+extents.rotated(rotation),
 		position+(extents*Vector2(-1,-1)).rotated(rotation),
 		position+(extents*Vector2(1,-1)).rotated(rotation),
-		position+(extents*Vector2(-1,1)).rotated(rotation)]
-	for target_pos in pos_to_test:
+		position+(extents*Vector2(-1,1)).rotated(rotation)
+	]
+	var min_pos := position
+	var max_pos := position
+	var min_angle := (position - shooting_tank.position).angle()
+	var max_angle := min_angle
+	for p in extents_pos:
+		var ang := ((p as Vector2) - shooting_tank.position).angle()
+		if ang < min_angle:
+			min_angle = ang
+			min_pos = p
+		if ang > max_angle:
+			max_angle = ang
+			max_pos = p
+	var has_los:=false
+	for target_pos in [min_pos,max_pos]:
 		var direct_space_state := get_world_2d().direct_space_state
 		var collision := direct_space_state.intersect_ray(shooting_tank.position, target_pos, [shooting_tank], collision_mask, true, true)
 		if collision.collider == self:
