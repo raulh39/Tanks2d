@@ -122,10 +122,14 @@ func _physics_process(delta):
 			get_parent().add_child(_my_target_cross)
 			_tank_that_want_to_shoot_us=null
 
-func _calculate_target_status(shooting_tank:Vehicle) -> int:
+func _calculate_line_of_sight(shooting_tank:Vehicle) -> bool:
 	var direct_space_state := get_world_2d().direct_space_state
 	var collision := direct_space_state.intersect_ray(shooting_tank.position, position, [shooting_tank], collision_mask, true, true)
 	shooting_tank._draw_vision_line(collision.position)
+	return true
+
+func _calculate_target_status(shooting_tank:Vehicle) -> int:
+	_calculate_line_of_sight(shooting_tank)
 	return TargetStatus.Visible
 
 func _draw_vision_line(global_dest_position: Vector2) -> void:
@@ -147,7 +151,7 @@ func _clean_vision_lines():
 func move_tank():
 	var a: Node2D = _arrow_scene.instance()
 	$HullBorderPath.add_child(a)
-	a.unit_offset = 0.4 #So the arrow appeard in the from side
+	a.unit_offset = 0.4 #So the arrow appear in the front side
 	yield(a.move(self), "completed")
 	a.queue_free()
 

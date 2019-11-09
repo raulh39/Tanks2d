@@ -4,7 +4,6 @@
 [ext_resource path="res://Assets/Arrow_01.png" type="Texture" id=2]
 [ext_resource path="res://Code/ArrowSprite.gd" type="Script" id=3]
 
-
 [node name="Arrow" type="PathFollow2D"]
 script = ExtResource( 1 )
 

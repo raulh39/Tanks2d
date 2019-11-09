@@ -99,7 +99,7 @@ func _reparent_tank_under_arrow()->void:
 	
 	_tank_parent.remove_child(_tank)
 	$ArrowSprite.add_child(_tank)
-	_place_tank()
+	_place_tank(true)
 	_last_offset = self.offset
 
 func _reparent_tank_over_arrow()->void:
@@ -141,7 +141,7 @@ func _adjust_tank_x_pos()->void:
 	_tank.position.x = clamp(_tank.position.x, _min_x, _max_x)
 
 
-func _place_tank() -> void:
+func _place_tank(position_in_edge: bool = false) -> void:
 	var _half_tank_dimension: int
 	match _tank_facing:
 		_Facings.FRONT:
@@ -167,4 +167,7 @@ func _place_tank() -> void:
 			_tank.position.y = +(HALF_ARROW_HEIGHT + _half_tank_dimension)
 	
 	_max_x = ARROW_WIDTH - _min_x
-	_adjust_tank_x_pos()
+	if position_in_edge:
+		_tank.position.x = _max_x
+	else:
+		_adjust_tank_x_pos()
