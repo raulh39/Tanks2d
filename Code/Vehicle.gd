@@ -122,15 +122,27 @@ func _physics_process(delta):
 			get_parent().add_child(_my_target_cross)
 			_tank_that_want_to_shoot_us=null
 
-func _calculate_line_of_sight(shooting_tank:Vehicle) -> bool:
-	var direct_space_state := get_world_2d().direct_space_state
-	var collision := direct_space_state.intersect_ray(shooting_tank.position, position, [shooting_tank], collision_mask, true, true)
-	shooting_tank._draw_vision_line(collision.position)
-	return true
-
 func _calculate_target_status(shooting_tank:Vehicle) -> int:
-	_calculate_line_of_sight(shooting_tank)
+	var line_of_sight := _calculate_line_of_sight(shooting_tank)
+	if not line_of_sight: return TargetStatus.NotVisible
 	return TargetStatus.Visible
+
+func _calculate_line_of_sight(shooting_tank:Vehicle) -> bool:
+	var extents :Vector2 = $HullShape.shape.extents - Vector2(5,5)
+	var has_los:=false
+	var pos_to_test = [
+	    position,
+	    position+extents.rotated(rotation),
+		position+(extents*Vector2(-1,-1)).rotated(rotation),
+		position+(extents*Vector2(1,-1)).rotated(rotation),
+		position+(extents*Vector2(-1,1)).rotated(rotation)]
+	for target_pos in pos_to_test:
+		var direct_space_state := get_world_2d().direct_space_state
+		var collision := direct_space_state.intersect_ray(shooting_tank.position, target_pos, [shooting_tank], collision_mask, true, true)
+		if collision.collider == self:
+			shooting_tank._draw_vision_line(collision.position)
+			has_los = true
+	return has_los
 
 func _draw_vision_line(global_dest_position: Vector2) -> void:
 	var new_line := Line2D.new()

@@ -33,7 +33,10 @@ Learning to program in godot using the fantastic Tanks board game
    - [ ] When waiting to select tank, some visual message should appear
    - [x] Move turret to face selected tank (maybe mouse?)
    - [ ] Animation (explosion?) when a tank fires
-   - [ ] Line of sight
+   - [ ] Line of sight (LoS)
+     - [ ] Woods blocks LoS, except the ones where the tanks are
+     - [ ] Throw N rays to see if someone hits
+   - [ ] Cover
    - [ ] Firing arc
    - [ ] It should be possible not to fire
    - [ ] Make roll
