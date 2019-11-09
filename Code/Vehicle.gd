@@ -111,7 +111,7 @@ func _physics_process(delta):
 	if not _tank_that_want_to_shoot_us:
 		return
 	_target_status = _calculate_target_status(_tank_that_want_to_shoot_us)
-	_tank_that_want_to_shoot_us = null
+	_tank_that_want_to_shoot_us = null #No more _physics_process needed
 	match _target_status:
 		TargetStatus.InCover:
 			pass #TODO
@@ -123,7 +123,24 @@ func _physics_process(delta):
 			_tank_that_want_to_shoot_us=null
 
 func _calculate_target_status(shooting_tank:Vehicle) -> int:
+	var direct_space_state := get_world_2d().direct_space_state
+	var collision := direct_space_state.intersect_ray(shooting_tank.position, position, [shooting_tank], collision_mask, true, true)
+	shooting_tank._draw_vision_line(collision.position)
 	return TargetStatus.Visible
+
+func _draw_vision_line(global_dest_position: Vector2) -> void:
+	var new_line := Line2D.new()
+	new_line.default_color = Color(1,1,0, .3)
+	add_child(new_line)
+	new_line.add_point(Vector2())
+	new_line.add_point((global_dest_position - global_position).rotated(-rotation))
+
+func _clean_vision_lines():
+	for i in get_children():
+		if i is Line2D:
+			remove_child(i)
+			i.queue_free()
+
 #-------------------------------------------
 # Move
 #-------------------------------------------
@@ -138,14 +155,17 @@ func move_tank():
 # Shoot
 #-------------------------------------------
 func shoot_tank(target_tank: Vehicle):
-	var rect := target_tank.get_rect()
-	yield(get_tree().create_timer(5), "timeout")
+	var time_out := 1
+	if not target_tank:
+		time_out = 0.05
+	yield(get_tree().create_timer(time_out), "timeout")
+	_clean_vision_lines()
 
 #-------------------------------------------
 # Command
 #-------------------------------------------
 func command_tank():
-	yield(get_tree().create_timer(5), "timeout")
+	set_movement_token(0)
 
 #-------------------------------------------
 # Functions called from other Nodes

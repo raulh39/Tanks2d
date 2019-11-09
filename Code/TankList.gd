@@ -101,8 +101,7 @@ func shoot_with_tanks() -> void:
 		shooting_tank.set_shooting(true)
 		var target_tank:Vehicle = yield(_select_target_tank(shooting_tank), "completed")
 		shooting_tank.set_shooting(false)
-		if target_tank:
-			yield(shooting_tank.shoot_tank(target_tank), "completed")
+		yield(shooting_tank.shoot_tank(target_tank), "completed")
 		shooting_tank.has_acted = true
 
 #Needed to handle input "ui_cancel"
@@ -135,5 +134,5 @@ func _set_targetable_tanks(shooting_tank:Vehicle, targetable: bool) -> void:
 #-----------------------------------------
 func command_tanks() -> void:
 	for i in get_children():
-		(i as Vehicle).set_movement_token(0)
+		(i as Vehicle).command_tank()
 	yield(get_tree().create_timer(1), "timeout")
