@@ -33,6 +33,7 @@ var _selectable := false
 var _my_target_cross
 var _arrow_scene = preload("res://Scenes/Arrow.tscn")
 var _target_cross_scene = preload("res://Scenes/TargetCross.tscn")
+var woods_underneath: Area2D = null
 
 onready var hull = $Hull
 
@@ -164,7 +165,13 @@ func _calculate_line_of_sight(shooting_tank:Vehicle) -> bool:
 	var has_los:=false
 	for target_pos in _get_positions_between(extents_pos.min_pos, extents_pos.max_pos):
 		var direct_space_state := get_world_2d().direct_space_state
-		var collision := direct_space_state.intersect_ray(shooting_tank.position, target_pos, [shooting_tank], collision_mask, true, true)
+		var collision_mask_for_woods_buildings_and_tanks = 0x07
+		var excluded_objects := [shooting_tank]
+		if shooting_tank.woods_underneath:
+			excluded_objects.append(shooting_tank.woods_underneath)
+		if woods_underneath:
+			excluded_objects.append(woods_underneath)
+		var collision := direct_space_state.intersect_ray(shooting_tank.position, target_pos, excluded_objects, collision_mask_for_woods_buildings_and_tanks, true, true)
 		if collision.collider == self:
 			shooting_tank._draw_vision_line(collision.position)
 			has_los = true
@@ -252,12 +259,14 @@ func is_overlapping()->bool:
 
 func _on_Vehicle_area_entered(area: Area2D) -> void:
 	if area.collision_layer == 2: #TODO: 2 is for Woods. Change that magic number
+		woods_underneath = area
 		return
 	_overlapping_tank_or_building += 1
 	modulate = collisioning_color
 
 func _on_Vehicle_area_exited(area: Area2D) -> void:
 	if area.collision_layer == 2: #TODO: 2 is for Woods. Change that magic number
+		woods_underneath = null
 		return
 	_overlapping_tank_or_building -= 1
 	if _overlapping_tank_or_building==0:

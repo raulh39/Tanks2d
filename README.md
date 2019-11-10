@@ -30,26 +30,25 @@ Learning to program in godot using the fantastic Tanks board game
  - [ ] SHOOT PHASE
    - [x] Handle tanks initiative order
    - [x] Pick target
-   - [ ] When waiting to select tank, some visual message should appear
    - [x] Move turret to face selected tank (maybe mouse?)
-   - [ ] Animation (explosion?) when a tank fires
-   - [ ] Line of sight (LoS)
-     - [ ] Woods blocks LoS, except the ones where the tanks are
-     - [ ] Throw N rays to see if someone hits
+   - [x] Line of sight (LoS)
+     - [x] Woods blocks LoS, except the ones where the tanks are
+     - [x] Throw N rays to see if anyone hits
+   - [x] It should be possible not to fire
    - [ ] Cover
    - [ ] Firing arc
-   - [ ] It should be possible not to fire
    - [ ] Make roll
      - [ ] Calculate number of attack dices
      - [ ] Calculate number of defense dices
    - [ ] Reroll if stationary
-   - [ ] Cover
    - [ ] Close range
    - [ ] Side shot
    - [ ] Assault gun
    - [ ] Hability: Coordinated Fire
    - [ ] Hability: Gung Ho
    - [ ] Hability: Semi-Indirect Fire
+   - [ ] Animation (explosion?) when a tank fires
+   - [ ] When waiting to select tank, some visual message should appear
  - [ ] COMMAND PHASE
    - [ ] Destroy Tanks
    - [ ] Check For Victory
