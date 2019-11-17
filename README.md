@@ -35,15 +35,15 @@ Learning to program in godot using the fantastic Tanks board game
      - [x] Woods blocks LoS, except the ones where the tanks are
      - [x] Throw N rays to see if anyone hits
    - [x] It should be possible not to fire
-   - [ ] Cover
-   - [ ] Firing arc
+   - [x] Cover
+   - [ ] Close range
+   - [ ] Side shot
+   - [ ] Firing arc (assault guns can't shoot behind or to the sides)
+   - [ ] Assault gun
    - [ ] Make roll
      - [ ] Calculate number of attack dices
      - [ ] Calculate number of defense dices
    - [ ] Reroll if stationary
-   - [ ] Close range
-   - [ ] Side shot
-   - [ ] Assault gun
    - [ ] Hability: Coordinated Fire
    - [ ] Hability: Gung Ho
    - [ ] Hability: Semi-Indirect Fire
