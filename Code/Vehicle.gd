@@ -180,8 +180,23 @@ static func _get_positions_between(min_pos: Vector2, max_pos: Vector2) -> Array:
 	ret.append(max_pos)
 	return ret
 
+enum CoverTokenType { Visible, Cover }
+
 func _calculate_target_is_in_cover(shooting_tank:Vehicle, target_corner_positions: Array) -> bool:
+	for i in target_corner_positions:
+		shooting_tank._add_cover_token(i, global_rotation, CoverTokenType.Visible)
 	return false
+
+func _add_cover_token(pos: Vector2, rot: float, type: int) -> void:
+	var s: Sprite = Sprite.new()
+	match type:
+		CoverTokenType.Visible:
+			s.texture = load("res://Assets/Tokens/GreenFullCircle_50.png")
+		CoverTokenType.Cover:
+			s.texture = load("res://Assets/Tokens/RedCross_50.png")
+	$VisionArtifacts.add_child(s)
+	s.global_position = pos
+	s.global_rotation = rot
 
 func _draw_vision_line(global_dest_position: Vector2) -> void:
 	var new_line := Line2D.new()
