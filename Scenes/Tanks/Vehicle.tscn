@@ -19,19 +19,21 @@ movement_tokens = [ ExtResource( 2 ), ExtResource( 3 ), ExtResource( 4 ) ]
 
 [node name="HullShape" type="CollisionShape2D" parent="."]
 
-[node name="VisionArtifacts" type="Node2D" parent="."]
-
 [node name="HullBorderPath" type="Path2D" parent="."]
 curve = SubResource( 1 )
 
 [node name="Hull" type="Sprite" parent="."]
+z_index = 10
 
 [node name="HullGlow" type="Sprite" parent="."]
 visible = false
+z_index = 10
 
 [node name="MovementToken" type="Sprite" parent="."]
 position = Vector2( -220, 0 )
 rotation = 1.5708
+
+[node name="VisionArtifacts" type="Node2D" parent="."]
 
 [node name="FiringPoint" type="Position2D" parent="."]
 [connection signal="area_entered" from="." to="." method="_on_Vehicle_area_entered"]

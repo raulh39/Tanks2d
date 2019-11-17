@@ -112,22 +112,18 @@ func _input(event: InputEvent)->void:
 		emit_signal("vehicle_selected", null)
 
 func _select_target_tank(shooting_tank:Vehicle) -> Vehicle:
-	_set_targetable_tanks(shooting_tank, true)
+	_set_targetable_tanks(shooting_tank)
 	_waiting_to_select_target = true
 	var vehicle = yield(self, "vehicle_selected")
 	_waiting_to_select_target = false
-	_set_targetable_tanks(shooting_tank, false)
 	return vehicle
 
-func _set_targetable_tanks(shooting_tank:Vehicle, targetable: bool) -> void:
+func _set_targetable_tanks(shooting_tank:Vehicle) -> void:
 	for i in get_children():
 		if i is Vehicle:
 			var v := (i as Vehicle)
 			if v.country != shooting_tank.country:
-				if targetable:
-					v.set_targetable(shooting_tank)
-				else:
-					v.unset_targetable()
+				v.set_targetable(shooting_tank)
 
 #-----------------------------------------
 # Tanks command

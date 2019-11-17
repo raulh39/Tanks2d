@@ -30,7 +30,6 @@ var has_acted := false
 var _overlapping_tank_or_building := 0
 
 var _selectable := false
-var _my_target_cross
 var _arrow_scene = preload("res://Scenes/Arrow.tscn")
 var _target_cross_scene = preload("res://Scenes/TargetCross.tscn")
 var woods_underneath: Area2D = null
@@ -90,19 +89,6 @@ enum TargetStatus {
 
 var _target_status = TargetStatus.NotShooting
 
-func unset_targetable()-> void:
-	match _target_status:
-		TargetStatus.NotShooting:
-			return
-		TargetStatus.NotVisible:
-			return
-		TargetStatus.InCover:
-			pass #TODO
-		TargetStatus.Visible:
-			get_parent().remove_child(_my_target_cross)
-			_my_target_cross.queue_free()
-			_my_target_cross = null
-
 func set_targetable(shooting_tank:Vehicle) -> void:
 	_tank_that_want_to_shoot_us = shooting_tank
 	#Look at _physics_process() for the code
@@ -113,14 +99,10 @@ func _physics_process(delta):
 	if not _tank_that_want_to_shoot_us:
 		return
 	_target_status = _calculate_target_status(_tank_that_want_to_shoot_us)
-	_tank_that_want_to_shoot_us = null #No more _physics_process needed
 	match _target_status:
 		TargetStatus.InCover, TargetStatus.Visible:
-			_my_target_cross = _target_cross_scene.instance()
-			_my_target_cross.global_position = self.global_position
-			_my_target_cross.global_rotation = 0
-			get_parent().add_child(_my_target_cross)
-			_tank_that_want_to_shoot_us=null
+			_tank_that_want_to_shoot_us._draw_target_cross(global_position)
+	_tank_that_want_to_shoot_us = null #No more _physics_process needed
 
 func _calculate_target_status(shooting_tank:Vehicle) -> int:
 	var target_corners_position := _get_vehicle_corners_positions(position, $HullShape.shape.extents - Vector2(5,5), rotation)
@@ -183,9 +165,20 @@ static func _get_positions_between(min_pos: Vector2, max_pos: Vector2) -> Array:
 enum CoverTokenType { Visible, Cover }
 
 func _calculate_target_is_in_cover(shooting_tank:Vehicle, target_corner_positions: Array) -> bool:
-	for i in target_corner_positions:
-		shooting_tank._add_cover_token(i, global_rotation, CoverTokenType.Visible)
-	return false
+	var direct_space_state := get_world_2d().direct_space_state
+	var collision_mask_for_woods_buildings_and_tanks = 0x07
+	var covered_corners: int = 0
+	for corner in target_corner_positions:
+		var excluded_objects := [shooting_tank, self]
+		if shooting_tank.woods_underneath:
+			excluded_objects.append(shooting_tank.woods_underneath)
+		var collision := direct_space_state.intersect_ray(shooting_tank.position, corner, excluded_objects, collision_mask_for_woods_buildings_and_tanks, true, true)
+		if not collision:
+			shooting_tank._add_cover_token(corner, global_rotation, CoverTokenType.Visible)
+		else:
+			shooting_tank._add_cover_token(corner, global_rotation, CoverTokenType.Cover)
+			covered_corners += 1
+	return covered_corners >= 2
 
 func _add_cover_token(pos: Vector2, rot: float, type: int) -> void:
 	var s: Sprite = Sprite.new()
@@ -197,6 +190,7 @@ func _add_cover_token(pos: Vector2, rot: float, type: int) -> void:
 	$VisionArtifacts.add_child(s)
 	s.global_position = pos
 	s.global_rotation = rot
+	s.z_index = 15
 
 func _draw_vision_line(global_dest_position: Vector2) -> void:
 	var new_line := Line2D.new()
@@ -204,11 +198,21 @@ func _draw_vision_line(global_dest_position: Vector2) -> void:
 	$VisionArtifacts.add_child(new_line)
 	new_line.add_point(Vector2())
 	new_line.add_point((global_dest_position - $VisionArtifacts.global_position).rotated(-rotation))
+	new_line.z_index = 5
 
-func _clean_vision_artifacts():
+func _draw_target_cross(global_dest_position: Vector2) -> void:
+	var target_cross = _target_cross_scene.instance()
+	$VisionArtifacts.add_child(target_cross)
+	target_cross.global_rotation = 0
+	target_cross.global_position = global_dest_position
+	target_cross.z_index = 15
+
+func _clean_vision_artifacts() -> void:
 	for i in $VisionArtifacts.get_children():
 		$VisionArtifacts.remove_child(i)
 		i.queue_free()
+
+
 
 #-------------------------------------------
 # Move
