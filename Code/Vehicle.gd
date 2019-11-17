@@ -125,24 +125,45 @@ func _physics_process(delta):
 			_tank_that_want_to_shoot_us=null
 
 func _calculate_target_status(shooting_tank:Vehicle) -> int:
-	var line_of_sight := _calculate_line_of_sight(shooting_tank)
+	var target_corners_position := _get_vehicle_corners_positions(position, $HullShape.shape.extents - Vector2(5,5), rotation)
+	var line_of_sight := _calculate_line_of_sight(shooting_tank, target_corners_position)
 	if not line_of_sight: return TargetStatus.NotVisible
 	return TargetStatus.Visible
 
-static func _get_extents(origin_position:Vector2, target_position:Vector2, target_extents :Vector2, target_rotation: float) -> Dictionary:
+static func _get_vehicle_corners_positions(v_position:Vector2, v_extents :Vector2, v_rotation: float) -> Array:
+		return [
+			v_position+v_extents.rotated(v_rotation),
+			v_position+(v_extents*Vector2(-1,-1)).rotated(v_rotation),
+			v_position+(v_extents*Vector2(1,-1)).rotated(v_rotation),
+			v_position+(v_extents*Vector2(-1,1)).rotated(v_rotation)
+		]
+
+func _calculate_line_of_sight(shooting_tank:Vehicle, target_corner_positions: Array) -> bool:
+	var extents_pos := _get_extents(shooting_tank.position, position, target_corner_positions)
+	var has_los:=false
+	var direct_space_state := get_world_2d().direct_space_state
+	for target_pos in _get_positions_between(extents_pos.min_pos, extents_pos.max_pos):
+		var collision_mask_for_woods_buildings_and_tanks = 0x07
+		var excluded_objects := [shooting_tank]
+		if shooting_tank.woods_underneath:
+			excluded_objects.append(shooting_tank.woods_underneath)
+		if woods_underneath:
+			excluded_objects.append(woods_underneath)
+		var collision := direct_space_state.intersect_ray(shooting_tank.position, target_pos, excluded_objects, collision_mask_for_woods_buildings_and_tanks, true, true)
+		if collision.collider == self:
+			shooting_tank._draw_vision_line(collision.position)
+			has_los = true
+	return has_los
+
+static func _get_extents(origin_position:Vector2, target_position:Vector2, target_corner_positions: Array) -> Dictionary:
 	var ret := {
 		min_pos=target_position,
 		max_pos=target_position
 	}
 	var min_angle := (target_position - origin_position).angle()
 	var max_angle := min_angle
-	var extents_pos = [
-	    target_position+target_extents.rotated(target_rotation),
-		target_position+(target_extents*Vector2(-1,-1)).rotated(target_rotation),
-		target_position+(target_extents*Vector2(1,-1)).rotated(target_rotation),
-		target_position+(target_extents*Vector2(-1,1)).rotated(target_rotation)
-	]
-	for p in extents_pos:
+	
+	for p in target_corner_positions:
 		var ang := ((p as Vector2) - origin_position).angle()
 		if ang < min_angle:
 			min_angle = ang
@@ -159,23 +180,6 @@ static func _get_positions_between(min_pos: Vector2, max_pos: Vector2) -> Array:
 		ret.append(min_pos+dir*(i/20.0))
 	ret.append(max_pos)
 	return ret
-
-func _calculate_line_of_sight(shooting_tank:Vehicle) -> bool:
-	var extents_pos := _get_extents(shooting_tank.position, position, $HullShape.shape.extents - Vector2(5,5), rotation)
-	var has_los:=false
-	for target_pos in _get_positions_between(extents_pos.min_pos, extents_pos.max_pos):
-		var direct_space_state := get_world_2d().direct_space_state
-		var collision_mask_for_woods_buildings_and_tanks = 0x07
-		var excluded_objects := [shooting_tank]
-		if shooting_tank.woods_underneath:
-			excluded_objects.append(shooting_tank.woods_underneath)
-		if woods_underneath:
-			excluded_objects.append(woods_underneath)
-		var collision := direct_space_state.intersect_ray(shooting_tank.position, target_pos, excluded_objects, collision_mask_for_woods_buildings_and_tanks, true, true)
-		if collision.collider == self:
-			shooting_tank._draw_vision_line(collision.position)
-			has_los = true
-	return has_los
 
 func _draw_vision_line(global_dest_position: Vector2) -> void:
 	var new_line := Line2D.new()
