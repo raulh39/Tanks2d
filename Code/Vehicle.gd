@@ -87,7 +87,7 @@ enum TargetStatus {
 	Visible
 }
 
-var _target_status = TargetStatus.NotShooting
+var _visibility_status = TargetStatus.NotShooting
 
 func set_targetable(shooting_tank:Vehicle) -> void:
 	_tank_that_want_to_shoot_us = shooting_tank
@@ -98,13 +98,13 @@ func set_targetable(shooting_tank:Vehicle) -> void:
 func _physics_process(delta):
 	if not _tank_that_want_to_shoot_us:
 		return
-	_target_status = _calculate_target_status(_tank_that_want_to_shoot_us)
-	match _target_status:
+	_visibility_status = _calculate_visibility_status(_tank_that_want_to_shoot_us)
+	match _visibility_status:
 		TargetStatus.InCover, TargetStatus.Visible:
-			_tank_that_want_to_shoot_us._draw_target_cross(global_position)
+			_tank_that_want_to_shoot_us._draw_target_cross(global_position, _visibility_status==TargetStatus.InCover)
 	_tank_that_want_to_shoot_us = null #No more _physics_process needed
 
-func _calculate_target_status(shooting_tank:Vehicle) -> int:
+func _calculate_visibility_status(shooting_tank:Vehicle) -> int:
 	var target_corners_position := _get_vehicle_corners_positions(position, $HullShape.shape.extents - Vector2(5,5), rotation)
 	var line_of_sight := _calculate_line_of_sight(shooting_tank, target_corners_position)
 	if not line_of_sight: return TargetStatus.NotVisible
@@ -200,12 +200,14 @@ func _draw_vision_line(global_dest_position: Vector2) -> void:
 	new_line.add_point((global_dest_position - $VisionArtifacts.global_position).rotated(-rotation))
 	new_line.z_index = 5
 
-func _draw_target_cross(global_dest_position: Vector2) -> void:
+func _draw_target_cross(global_dest_position: Vector2, is_in_cover: bool) -> void:
 	var target_cross = _target_cross_scene.instance()
 	$VisionArtifacts.add_child(target_cross)
 	target_cross.global_rotation = 0
 	target_cross.global_position = global_dest_position
 	target_cross.z_index = 15
+	if is_in_cover:
+		target_cross.modulate = Color(1,0,0)
 
 func _clean_vision_artifacts() -> void:
 	for i in $VisionArtifacts.get_children():
@@ -268,7 +270,7 @@ func get_rect()->Rect2:
 func _input_event(viewport: Object, event: InputEvent, shape_idx: int) -> void:
 	if not event is InputEventMouseButton:
 		return
-	if not _selectable and _target_status != TargetStatus.Visible and _target_status != TargetStatus.InCover:
+	if not _selectable and _visibility_status != TargetStatus.Visible and _visibility_status != TargetStatus.InCover:
 		return
 	var evt : InputEventMouseButton = (event as InputEventMouseButton)
 	if evt.button_index == BUTTON_LEFT and not evt.pressed:
