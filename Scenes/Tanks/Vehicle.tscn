@@ -19,6 +19,8 @@ movement_tokens = [ ExtResource( 2 ), ExtResource( 3 ), ExtResource( 4 ) ]
 
 [node name="HullShape" type="CollisionShape2D" parent="."]
 
+[node name="VisionArtifacts" type="Node2D" parent="."]
+
 [node name="HullBorderPath" type="Path2D" parent="."]
 curve = SubResource( 1 )
 

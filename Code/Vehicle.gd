@@ -115,9 +115,7 @@ func _physics_process(delta):
 	_target_status = _calculate_target_status(_tank_that_want_to_shoot_us)
 	_tank_that_want_to_shoot_us = null #No more _physics_process needed
 	match _target_status:
-		TargetStatus.InCover:
-			pass #TODO
-		TargetStatus.Visible:	
+		TargetStatus.InCover, TargetStatus.Visible:
 			_my_target_cross = _target_cross_scene.instance()
 			_my_target_cross.global_position = self.global_position
 			_my_target_cross.global_rotation = 0
@@ -128,6 +126,7 @@ func _calculate_target_status(shooting_tank:Vehicle) -> int:
 	var target_corners_position := _get_vehicle_corners_positions(position, $HullShape.shape.extents - Vector2(5,5), rotation)
 	var line_of_sight := _calculate_line_of_sight(shooting_tank, target_corners_position)
 	if not line_of_sight: return TargetStatus.NotVisible
+	if _calculate_target_is_in_cover(shooting_tank, target_corners_position): return TargetStatus.InCover
 	return TargetStatus.Visible
 
 static func _get_vehicle_corners_positions(v_position:Vector2, v_extents :Vector2, v_rotation: float) -> Array:
@@ -139,7 +138,7 @@ static func _get_vehicle_corners_positions(v_position:Vector2, v_extents :Vector
 		]
 
 func _calculate_line_of_sight(shooting_tank:Vehicle, target_corner_positions: Array) -> bool:
-	var extents_pos := _get_extents(shooting_tank.position, position, target_corner_positions)
+	var extents_pos := _get_extents(shooting_tank.position, target_corner_positions)
 	var has_los:=false
 	var direct_space_state := get_world_2d().direct_space_state
 	for target_pos in _get_positions_between(extents_pos.min_pos, extents_pos.max_pos):
@@ -155,12 +154,12 @@ func _calculate_line_of_sight(shooting_tank:Vehicle, target_corner_positions: Ar
 			has_los = true
 	return has_los
 
-static func _get_extents(origin_position:Vector2, target_position:Vector2, target_corner_positions: Array) -> Dictionary:
+static func _get_extents(origin_position:Vector2, target_corner_positions: Array) -> Dictionary:
 	var ret := {
-		min_pos=target_position,
-		max_pos=target_position
+		min_pos=target_corner_positions[0],
+		max_pos=target_corner_positions[0]
 	}
-	var min_angle := (target_position - origin_position).angle()
+	var min_angle := ((target_corner_positions[0] as Vector2)- origin_position).angle()
 	var max_angle := min_angle
 	
 	for p in target_corner_positions:
@@ -181,19 +180,20 @@ static func _get_positions_between(min_pos: Vector2, max_pos: Vector2) -> Array:
 	ret.append(max_pos)
 	return ret
 
+func _calculate_target_is_in_cover(shooting_tank:Vehicle, target_corner_positions: Array) -> bool:
+	return false
+
 func _draw_vision_line(global_dest_position: Vector2) -> void:
 	var new_line := Line2D.new()
 	new_line.default_color = Color(1,1,0, .3)
-	add_child_below_node($HullShape, new_line)
-	#add_child(new_line)
+	$VisionArtifacts.add_child(new_line)
 	new_line.add_point(Vector2())
-	new_line.add_point((global_dest_position - global_position).rotated(-rotation))
+	new_line.add_point((global_dest_position - $VisionArtifacts.global_position).rotated(-rotation))
 
-func _clean_vision_lines():
-	for i in get_children():
-		if i is Line2D:
-			remove_child(i)
-			i.queue_free()
+func _clean_vision_artifacts():
+	for i in $VisionArtifacts.get_children():
+		$VisionArtifacts.remove_child(i)
+		i.queue_free()
 
 #-------------------------------------------
 # Move
@@ -213,7 +213,7 @@ func shoot_tank(target_tank: Vehicle):
 	if not target_tank:
 		time_out = 0.05
 	yield(get_tree().create_timer(time_out), "timeout")
-	_clean_vision_lines()
+	_clean_vision_artifacts()
 
 #-------------------------------------------
 # Command
