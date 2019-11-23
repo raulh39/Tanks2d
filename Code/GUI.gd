@@ -4,7 +4,7 @@ class_name Gui
 
 enum Phases { MOVE, SHOOT, COMMAND }
 
-onready var _phase_label: Label = ($HBoxContainer/PhaseLabel as Label)
+onready var _phase_label: Label = ($MainContainer/Phase as Label)
 
 func setPhase(new_phase: int) -> void:
 	match new_phase:
