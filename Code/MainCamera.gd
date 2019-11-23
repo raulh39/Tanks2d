@@ -2,8 +2,6 @@ extends Camera2D
 
 func clamp_offset() -> void:
 	var pixels_shown_by_camera := OS.window_size * zoom
-	print("pixels_shown_by_camera: ", pixels_shown_by_camera)
-	print("prev offset: ", offset)
 	if pixels_shown_by_camera.x < 5500:
 		offset.x = clamp(offset.x, -500, 5000 - pixels_shown_by_camera.x)
 	else:
@@ -12,7 +10,6 @@ func clamp_offset() -> void:
 		offset.y = clamp(offset.y, -500, 5000 - pixels_shown_by_camera.y)
 	else:
 		offset.y = (4500 - pixels_shown_by_camera.y)/2
-	print("post offset: ", offset)
 
 const MIN_ZOOM_LEVEL: float = 0.5
 var MAX_ZOOM_LEVEL: float

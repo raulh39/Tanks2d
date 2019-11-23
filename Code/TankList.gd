@@ -1,6 +1,7 @@
 extends Node2D
 
 signal vehicle_selected(tank)
+signal vehicle_about_to_shoot(shooting_tank)
 signal vehicle_shooted
 signal mouse_entered_target_vehicle(vehicle)
 signal mouse_exited_target_vehicle(vehicle)
@@ -102,6 +103,7 @@ func shoot_with_tanks() -> void:
 	while _more_to_act():
 		var shooting_tank:Vehicle = yield(_select_tank_by_initiative(funcref(self, "gt")), "completed")
 		shooting_tank.set_shooting(true)
+		emit_signal("vehicle_about_to_shoot", shooting_tank)
 		var target_tank:Vehicle = yield(_select_target_tank(shooting_tank), "completed")
 		shooting_tank.set_shooting(false)
 		yield(shooting_tank.shoot_tank(target_tank), "completed")

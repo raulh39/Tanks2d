@@ -17,7 +17,11 @@ func setPhase(new_phase: int) -> void:
 		Phases.COMMAND:
 			_phase_label.text = "Command Phase"
 
-func show_info():
+func update_shooting_tank_info(shooting_tank: Vehicle) -> void:
+	_container.update_shooting_info(shooting_tank)
+
+func show_info(target_tank: Vehicle)->void:
+	_container.update_target_info(target_tank)
 	_container.visible = true
 
 func hide_info():

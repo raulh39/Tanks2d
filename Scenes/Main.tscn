@@ -46,4 +46,5 @@ position = Vector2( 229.161, 4257.96 )
 rotation = -0.82905
 [connection signal="mouse_entered_target_vehicle" from="TankList" to="." method="_on_TankList_mouse_entered_target_vehicle"]
 [connection signal="mouse_exited_target_vehicle" from="TankList" to="." method="_on_TankList_mouse_exited_target_vehicle"]
+[connection signal="vehicle_about_to_shoot" from="TankList" to="." method="_on_TankList_vehicle_about_to_shoot"]
 [connection signal="vehicle_shooted" from="TankList" to="." method="_on_TankList_vehicle_shooted"]
