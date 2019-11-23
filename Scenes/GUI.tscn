@@ -51,6 +51,7 @@ custom_fonts/font = ExtResource( 3 )
 text = "Movement phase"
 
 [node name="StatisticsContainer" type="VBoxContainer" parent="MainContainer"]
+editor/display_folded = true
 visible = false
 margin_top = 51.0
 margin_right = 432.0

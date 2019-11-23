@@ -1,6 +1,8 @@
 extends Node2D
 
 signal vehicle_selected(tank)
+signal mouse_entered_vehicle(vehicle)
+signal mouse_exited_vehicle(vehicle)
 
 func _ready():
 	for i in get_children():

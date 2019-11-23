@@ -44,3 +44,5 @@ tank_name = "Sherman (75 mm) 2"
 [node name="Panther_1" parent="TankList" instance=ExtResource( 7 )]
 position = Vector2( 229.161, 4257.96 )
 rotation = -0.82905
+[connection signal="mouse_entered_vehicle" from="TankList" to="." method="_on_TankList_mouse_entered_vehicle"]
+[connection signal="mouse_exited_vehicle" from="TankList" to="." method="_on_TankList_mouse_exited_vehicle"]

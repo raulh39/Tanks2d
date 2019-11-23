@@ -43,9 +43,11 @@ signal vehicle_selected(vehicle)
 #-------------------------------------------
 func _on_Vehicle_mouse_entered():
 	($Hull as CanvasItem).modulate = Color.yellow
+	get_parent().emit_signal("mouse_entered_vehicle", self)
 
 func _on_Vehicle_mouse_exited():
 	($Hull as CanvasItem).modulate = Color.white
+	get_parent().emit_signal("mouse_exited_vehicle", self)
 
 #-------------------------------------------
 # Functions dealing with tank state (selecting, targeting and shooting)
