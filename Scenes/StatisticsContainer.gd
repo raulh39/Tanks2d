@@ -24,12 +24,16 @@ func update_shooting_info(shooting_tank: Vehicle) -> void:
 
 func update_target_info(target_tank: Vehicle) -> void:
 	var total_defense_dice :int = _shooting_tank_mov_number.text.to_int()
+	
 	_defense_value_number.text = str(target_tank.defense)
 	total_defense_dice += target_tank.defense
+	
 	_target_tank_mov_number.text = str(target_tank.movements)
 	total_defense_dice += target_tank.movements
+	
 	_close_range.pressed = false #TODO
 	_close_range.text = "not implemented" #TODO
+	
 	if target_tank.visibility_status == Vehicle.TargetStatus.InCover:
 		_cover.pressed = true
 		_cover.text = "+1"
@@ -37,6 +41,8 @@ func update_target_info(target_tank: Vehicle) -> void:
 	else:
 		_cover.pressed = false
 		_cover.text = ""
+	
 	_side_shot.pressed = false #TODO
 	_side_shot.text = "not implemented" #TODO
+	
 	_defense_dice_number.text = str(total_defense_dice)
