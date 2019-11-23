@@ -27,12 +27,13 @@ export var non_collisioning_color: Color
 export (Array, Texture) var movement_tokens = []
 
 var has_acted := false
-var _overlapping_tank_or_building := 0
+var woods_underneath: Area2D = null
+var movements: int = 0
 
+var _overlapping_tank_or_building := 0
 var _selectable := false
 var _arrow_scene = preload("res://Scenes/Arrow.tscn")
 var _target_cross_scene = preload("res://Scenes/TargetCross.tscn")
-var woods_underneath: Area2D = null
 var _tank_that_want_to_shoot_us:Vehicle = null
 var _visibility_status = TargetStatus.NotShooting
 var _can_be_selected_as_a_target := false
@@ -264,10 +265,12 @@ func total_adjusted_initiative() -> int:
 func set_movement_token(value: int)->void:
 	if value <= 0:
 		$MovementToken.texture = null
+		movements = 0
 		return
 	if value > movement_tokens.size():
 		return
 	$MovementToken.texture = movement_tokens[value-1]
+	movements=value
 
 func get_rect()->Rect2:
 	return $Hull.get_rect()
