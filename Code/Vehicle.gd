@@ -14,6 +14,13 @@ enum Abilities {
 	blitzkrieg
 }
 
+enum TargetStatus {
+	NotShooting,
+	NotVisible,
+	InCover,
+	Visible
+}
+
 export (String) var tank_name
 export (Countries) var country
 export (int, 0, 200) var point_value
@@ -29,13 +36,13 @@ export (Array, Texture) var movement_tokens = []
 var has_acted := false
 var woods_underneath: Area2D = null
 var movements: int = 0
+var visibility_status = TargetStatus.NotShooting
 
 var _overlapping_tank_or_building := 0
 var _selectable := false
 var _arrow_scene = preload("res://Scenes/Arrow.tscn")
 var _target_cross_scene = preload("res://Scenes/TargetCross.tscn")
 var _tank_that_want_to_shoot_us:Vehicle = null
-var _visibility_status = TargetStatus.NotShooting
 var _can_be_selected_as_a_target := false
 
 onready var hull = $Hull
@@ -86,15 +93,6 @@ func set_shooting(is_shooting: bool)->void:
 #      order to not recalculate again the same values
 #-------------------------------------------
 
-
-enum TargetStatus {
-	NotShooting,
-	NotVisible,
-	InCover,
-	Visible
-}
-
-
 func unset_targetable() -> void:
 	_can_be_selected_as_a_target = false
 
@@ -107,10 +105,10 @@ func set_targetable(shooting_tank:Vehicle) -> void:
 func _physics_process(delta):
 	if not _tank_that_want_to_shoot_us:
 		return
-	_visibility_status = _calculate_visibility_status(_tank_that_want_to_shoot_us)
-	match _visibility_status:
+	visibility_status = _calculate_visibility_status(_tank_that_want_to_shoot_us)
+	match visibility_status:
 		TargetStatus.InCover, TargetStatus.Visible:
-			_tank_that_want_to_shoot_us._draw_target_cross(global_position, _visibility_status==TargetStatus.InCover)
+			_tank_that_want_to_shoot_us._draw_target_cross(global_position, visibility_status==TargetStatus.InCover)
 			_can_be_selected_as_a_target = true
 	_tank_that_want_to_shoot_us = null #No more _physics_process needed
 
