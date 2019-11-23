@@ -90,6 +90,10 @@ enum TargetStatus {
 }
 
 var _visibility_status = TargetStatus.NotShooting
+var _can_be_selected_as_a_target := false
+
+func unset_targetable() -> void:
+	_can_be_selected_as_a_target = false
 
 func set_targetable(shooting_tank:Vehicle) -> void:
 	_tank_that_want_to_shoot_us = shooting_tank
@@ -104,6 +108,7 @@ func _physics_process(delta):
 	match _visibility_status:
 		TargetStatus.InCover, TargetStatus.Visible:
 			_tank_that_want_to_shoot_us._draw_target_cross(global_position, _visibility_status==TargetStatus.InCover)
+			_can_be_selected_as_a_target = true
 	_tank_that_want_to_shoot_us = null #No more _physics_process needed
 
 func _calculate_visibility_status(shooting_tank:Vehicle) -> int:
@@ -272,7 +277,7 @@ func get_rect()->Rect2:
 func _input_event(viewport: Object, event: InputEvent, shape_idx: int) -> void:
 	if not event is InputEventMouseButton:
 		return
-	if not _selectable and _visibility_status != TargetStatus.Visible and _visibility_status != TargetStatus.InCover:
+	if not _selectable and not _can_be_selected_as_a_target:
 		return
 	var evt : InputEventMouseButton = (event as InputEventMouseButton)
 	if evt.button_index == BUTTON_LEFT and not evt.pressed:
