@@ -33,6 +33,9 @@ var _selectable := false
 var _arrow_scene = preload("res://Scenes/Arrow.tscn")
 var _target_cross_scene = preload("res://Scenes/TargetCross.tscn")
 var woods_underneath: Area2D = null
+var _tank_that_want_to_shoot_us:Vehicle = null
+var _visibility_status = TargetStatus.NotShooting
+var _can_be_selected_as_a_target := false
 
 onready var hull = $Hull
 
@@ -43,11 +46,13 @@ signal vehicle_selected(vehicle)
 #-------------------------------------------
 func _on_Vehicle_mouse_entered():
 	($Hull as CanvasItem).modulate = Color.yellow
-	get_parent().emit_signal("mouse_entered_vehicle", self)
+	if _can_be_selected_as_a_target:
+		get_parent().emit_signal("mouse_entered_target_vehicle", self)
 
 func _on_Vehicle_mouse_exited():
 	($Hull as CanvasItem).modulate = Color.white
-	get_parent().emit_signal("mouse_exited_vehicle", self)
+	if _can_be_selected_as_a_target:
+		get_parent().emit_signal("mouse_exited_target_vehicle", self)
 
 #-------------------------------------------
 # Functions dealing with tank state (selecting, targeting and shooting)
@@ -80,7 +85,6 @@ func set_shooting(is_shooting: bool)->void:
 #      order to not recalculate again the same values
 #-------------------------------------------
 
-var _tank_that_want_to_shoot_us:Vehicle = null
 
 enum TargetStatus {
 	NotShooting,
@@ -89,8 +93,6 @@ enum TargetStatus {
 	Visible
 }
 
-var _visibility_status = TargetStatus.NotShooting
-var _can_be_selected_as_a_target := false
 
 func unset_targetable() -> void:
 	_can_be_selected_as_a_target = false
@@ -242,6 +244,7 @@ func shoot_tank(target_tank: Vehicle):
 		time_out = 0.05
 	yield(get_tree().create_timer(time_out), "timeout")
 	_clean_vision_artifacts()
+	get_parent().emit_signal("vehicle_shooted")
 
 #-------------------------------------------
 # Command

@@ -15,11 +15,13 @@ func _ready():
 		yield($TankList.command_tanks(), "completed")
 
 
-func _on_TankList_mouse_entered_vehicle(vehicle):
-	if not _shooting: return
+func _on_TankList_mouse_entered_target_vehicle(vehicle):
 	_gui.show_info()
 
 
-func _on_TankList_mouse_exited_vehicle(vehicle):
-	if not _shooting: return
+func _on_TankList_mouse_exited_target_vehicle(vehicle):
+	_gui.hide_info()
+
+
+func _on_TankList_vehicle_shooted():
 	_gui.hide_info()
