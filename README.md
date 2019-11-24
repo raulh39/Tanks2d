@@ -36,6 +36,7 @@ Learning to program in godot using the fantastic Tanks board game
      - [x] Throw N rays to see if anyone hits
    - [x] It should be possible not to fire
    - [x] Cover
+   - [ ] BUG: Cover must take into account woods that are not directly under shooting tank
    - [ ] Close range
    - [ ] Side shot
    - [ ] Firing arc (assault guns can't shoot behind or to the sides)
@@ -55,3 +56,12 @@ Learning to program in godot using the fantastic Tanks board game
    - [ ] Repair Damage / Hability: Blitzkrieg
    - [ ] Reset the field
  - [ ] SOUND
+ - [ ] PRETIFY
+   - [ ] HUD: show image dice instead of numbers
+   - [ ] HUD: better checkboxes
+   - [ ] HUD: use bars instead of numbers
+ - [ ] CODE Refactor
+   - [ ] Signal hell: to many, wired to weird, some using coroutines, some not (see https://youtu.be/S6PbC4Vqim4?t=381)
+   - [ ] Extract some code to "library" ("Autoload" in Project Settings)
+   - [ ] Attack and defense dice calculations should be done in its own Node.
+   - [ ] Tanklist and Vehicle scripts are way to big, way to convoluted
