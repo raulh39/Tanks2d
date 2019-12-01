@@ -65,3 +65,4 @@ Learning to program in godot using the fantastic Tanks board game
    - [ ] Extract some code to "library" ("Autoload" in Project Settings). For example: Game State
    - [ ] Attack and defense dice calculations should be done in its own Node.
    - [ ] Tanklist and Vehicle scripts are way too big, way too convoluted
+ - [ ] 3D dice rolling
