@@ -1,9 +1,11 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Scenes/Dices.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/Dice.tscn" type="PackedScene" id=2]
 
 [node name="Dices" type="Node2D"]
 script = ExtResource( 1 )
+max_number_of_dices = 10
 
 [node name="Roll" type="Button" parent="."]
 margin_left = 28.0
@@ -25,6 +27,9 @@ margin_top = 36.9495
 margin_right = 214.401
 margin_bottom = 56.9495
 text = "-"
+
+[node name="FirstDice" parent="." instance=ExtResource( 2 )]
+position = Vector2( 53.2876, 94.0017 )
 [connection signal="pressed" from="Roll" to="." method="_on_Roll_pressed"]
 [connection signal="pressed" from="AddButton" to="." method="_on_AddButton_pressed"]
 [connection signal="pressed" from="DelButton" to="." method="_on_DelButton_pressed"]
