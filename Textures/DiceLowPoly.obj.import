@@ -1,0 +1,18 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/DiceLowPoly.obj-87578df717e8a51a02504ddbb4c4818b.mesh"
+
+[deps]
+
+files=[ "res://.import/DiceLowPoly.obj-87578df717e8a51a02504ddbb4c4818b.mesh" ]
+
+source_file="res://Textures/DiceLowPoly.obj"
+dest_files=[ "res://.import/DiceLowPoly.obj-87578df717e8a51a02504ddbb4c4818b.mesh", "res://.import/DiceLowPoly.obj-87578df717e8a51a02504ddbb4c4818b.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+optimize_mesh=true
