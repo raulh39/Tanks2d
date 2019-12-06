@@ -34,3 +34,8 @@ func _on_TankList_mouse_exited_target_vehicle(target_tank: Vehicle)->void:
 
 func _on_TankList_vehicle_shooted():
 	_gui.hide_info()
+
+func _input(event):
+	if event.is_action("roll"):
+		$CanvasLayer/Container3D.visible = true
+		$Viewport/Roll.roll()
