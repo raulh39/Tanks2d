@@ -17,7 +17,7 @@ _global_script_classes=[ {
 "base": "RigidBody",
 "class": "Dice",
 "language": "GDScript",
-"path": "res://Scenes/Roll/Dice.gd"
+"path": "res://Code/Dice.gd"
 }, {
 "base": "MarginContainer",
 "class": "Gui",
