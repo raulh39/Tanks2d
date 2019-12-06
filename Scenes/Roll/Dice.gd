@@ -1,7 +1,8 @@
 extends RigidBody
 
+class_name Dice
+
 func _ready() -> void:
-	add_to_group("dices")
 	stop()
 
 func run() -> void:

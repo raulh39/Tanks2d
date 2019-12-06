@@ -2,7 +2,9 @@ extends Node2D
 
 onready var _gui := $CanvasLayer/GUI
 
-var _shooting:=false
+var _shooting:=false #TODO: is this used?
+
+var _rolling := false
 
 func _ready():
 	var _3d_viewport := $Viewport
@@ -36,6 +38,12 @@ func _on_TankList_vehicle_shooted():
 	_gui.hide_info()
 
 func _input(event):
-	if event.is_action("roll"):
+	if not _rolling and event.is_action("roll"):
+		_rolling = true
 		$CanvasLayer/Container3D.visible = true
-		$Viewport/Roll.roll()
+		$Viewport/Roll.roll(5)
+
+
+func _on_Roll_rolled() -> void:
+		_rolling = false
+		$CanvasLayer/Container3D.visible = false

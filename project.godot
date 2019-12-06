@@ -14,6 +14,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Code/Arrow.gd"
 }, {
+"base": "RigidBody",
+"class": "Dice",
+"language": "GDScript",
+"path": "res://Scenes/Roll/Dice.gd"
+}, {
 "base": "MarginContainer",
 "class": "Gui",
 "language": "GDScript",
@@ -31,6 +36,7 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "Arrow": "",
+"Dice": "",
 "Gui": "",
 "Turret": "",
 "Vehicle": ""

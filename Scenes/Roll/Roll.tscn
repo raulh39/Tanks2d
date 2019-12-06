@@ -1,13 +1,37 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Scenes/Roll/Wall.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Scenes/Roll/Dice.tscn" type="PackedScene" id=2]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Spatial
 
-func roll():
-	get_tree().call_group(\"dices\", \"run\")
+var _dice_scene = preload(\"res://Scenes/Roll/Dice.tscn\")
+var _dices_rolling:= 0
+var _dices:=[]
+
+signal rolled
+
+func dice_sleeping_state_changed(dice: Dice, d:int)->void:
+	if dice.sleeping:
+		_dices_rolling -= 1
+	else:
+		_dices_rolling += 1
+	if _dices_rolling > 0: return
+	for dice in _dices:
+		remove_child(dice)
+		dice.queue_free()
+	emit_signal(\"rolled\")
+
+
+func roll(number_of_dices: int) -> void:
+	if _dices_rolling > 0: return
+	_dices_rolling = number_of_dices
+	for d in range(0, number_of_dices):
+		var new_dice:Dice = _dice_scene.instance()
+		add_child(new_dice)
+		new_dice.connect(\"sleeping_state_changed\", self, \"dice_sleeping_state_changed\", [new_dice, d])
+		new_dice.run()
+		_dices.append(new_dice)
 "
 
 [node name="Roll" type="Spatial"]
@@ -48,20 +72,3 @@ transform = Transform( -2.18557e-07, 1, -2.18557e-07, 0, -4.37114e-08, -5, -5, -
 
 [node name="Wall_back" parent="." instance=ExtResource( 1 )]
 transform = Transform( 8, 0, 0, 0, -4.37114e-08, 5, 0, -1, -2.18557e-07, 0, 5, 5 )
-
-[node name="Dice" parent="." instance=ExtResource( 2 )]
-transform = Transform( 0.924215, -0.246544, 0.29162, 0.251784, 0.967576, 0.0200499, -0.287107, 0.0548947, 0.956324, 0.514496, 4.22112, -0.0011235 )
-linear_velocity = Vector3( 0, -13.65, -28.19 )
-
-[node name="Dice2" parent="." instance=ExtResource( 2 )]
-transform = Transform( 0.351148, 0.366529, -0.861597, -0.935766, 0.169009, -0.309479, 0.0321858, 0.914927, 0.402334, 0.811492, 6.70582, -1.3734 )
-linear_velocity = Vector3( 0, 0, 14 )
-
-[node name="Dice3" parent="." instance=ExtResource( 2 )]
-transform = Transform( -0.174459, 0.414413, -0.893211, -0.484882, -0.82567, -0.288372, -0.857003, 0.382792, 0.344986, -0.694922, 6.70001, 0.444001 )
-
-[node name="Dice4" parent="." instance=ExtResource( 2 )]
-transform = Transform( -0.650118, -0.417718, 0.634712, -0.736468, 0.55197, -0.39108, -0.186981, -0.721693, -0.666482, 0.918951, 1.50985, 0.444001 )
-
-[node name="Dice5" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.21473, 0.57323, 4.31565 )
