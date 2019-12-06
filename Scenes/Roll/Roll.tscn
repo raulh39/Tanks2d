@@ -29,6 +29,11 @@ func roll(number_of_dices: int) -> void:
 	for d in range(0, number_of_dices):
 		var new_dice:Dice = _dice_scene.instance()
 		add_child(new_dice)
+		new_dice.translation = Vector3( #TODO: change this magic numbers to calculated values
+									rand_range(-7.3, 7.3),
+									rand_range(0.6, 9.4),
+									rand_range(-4.3, 4.3)
+								)
 		new_dice.connect(\"sleeping_state_changed\", self, \"dice_sleeping_state_changed\", [new_dice, d])
 		new_dice.run()
 		_dices.append(new_dice)
