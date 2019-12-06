@@ -1,12 +1,14 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Code/Main.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/Map.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Code/MainCamera.gd" type="Script" id=3]
 [ext_resource path="res://Scenes/GUI.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Scenes/TankList.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Scenes/Tanks/American/ShermanTank.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Scenes/Tanks/German/Panther.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Assets/3dViewport.png" type="Texture" id=5]
+[ext_resource path="res://Scenes/TankList.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Scenes/Tanks/American/ShermanTank.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Scenes/Tanks/German/Panther.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Scenes/Roll/Roll.tscn" type="PackedScene" id=9]
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 1 )
@@ -29,21 +31,40 @@ script = ExtResource( 3 )
 
 [node name="GUI" parent="CanvasLayer" instance=ExtResource( 4 )]
 
-[node name="TankList" parent="." instance=ExtResource( 5 )]
+[node name="Container3D" type="MarginContainer" parent="CanvasLayer"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -500.0
+margin_top = -300.0
 
-[node name="ShermanTank_1" parent="TankList" instance=ExtResource( 6 )]
+[node name="ViewportSprite" type="Sprite" parent="CanvasLayer/Container3D"]
+texture = ExtResource( 5 )
+centered = false
+
+[node name="TankList" parent="." instance=ExtResource( 6 )]
+
+[node name="ShermanTank_1" parent="TankList" instance=ExtResource( 7 )]
 position = Vector2( 4027.74, 208.258 )
 rotation = 2.35619
 tank_name = "Sherman (75 mm) 1"
 
-[node name="ShermanTank_2" parent="TankList" instance=ExtResource( 6 )]
+[node name="ShermanTank_2" parent="TankList" instance=ExtResource( 7 )]
 position = Vector2( 4279.77, 412.406 )
 rotation = 2.35619
 tank_name = "Sherman (75 mm) 2"
 
-[node name="Panther_1" parent="TankList" instance=ExtResource( 7 )]
+[node name="Panther_1" parent="TankList" instance=ExtResource( 8 )]
 position = Vector2( 229.161, 4257.96 )
 rotation = -0.82905
+
+[node name="Viewport" type="Viewport" parent="."]
+size = Vector2( 500, 300 )
+own_world = true
+render_target_v_flip = true
+
+[node name="Roll" parent="Viewport" instance=ExtResource( 9 )]
 [connection signal="mouse_entered_target_vehicle" from="TankList" to="." method="_on_TankList_mouse_entered_target_vehicle"]
 [connection signal="mouse_exited_target_vehicle" from="TankList" to="." method="_on_TankList_mouse_exited_target_vehicle"]
 [connection signal="vehicle_about_to_shoot" from="TankList" to="." method="_on_TankList_vehicle_about_to_shoot"]

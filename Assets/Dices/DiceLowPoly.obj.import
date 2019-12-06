@@ -1,0 +1,18 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/DiceLowPoly.obj-9686f77a0725c5c39346dc043f341389.mesh"
+
+[deps]
+
+files=[ "res://.import/DiceLowPoly.obj-9686f77a0725c5c39346dc043f341389.mesh" ]
+
+source_file="res://Assets/Dices/DiceLowPoly.obj"
+dest_files=[ "res://.import/DiceLowPoly.obj-9686f77a0725c5c39346dc043f341389.mesh", "res://.import/DiceLowPoly.obj-9686f77a0725c5c39346dc043f341389.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+optimize_mesh=true
