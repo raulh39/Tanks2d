@@ -20,6 +20,7 @@ func dice_sleeping_state_changed(dice: Dice, d:int)->void:
 	for dice in _dices:
 		remove_child(dice)
 		dice.queue_free()
+	_dices = []
 	emit_signal(\"rolled\")
 
 
