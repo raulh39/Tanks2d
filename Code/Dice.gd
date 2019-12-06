@@ -13,7 +13,7 @@ func _ready():
 							)
 	self.linear_velocity = Vector3(
 									rand_range(-MAX_LINEAR_VELOCITY, MAX_LINEAR_VELOCITY),
-									rand_range(-MAX_LINEAR_VELOCITY, MAX_LINEAR_VELOCITY),
+									rand_range(-MAX_LINEAR_VELOCITY, 0),
 									rand_range(-MAX_LINEAR_VELOCITY, MAX_LINEAR_VELOCITY)
 							)
 	self.rotation_degrees = Vector3(

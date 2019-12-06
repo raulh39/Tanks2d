@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Scenes/Roll/Wall.tscn" type="PackedScene" id=1]
 
@@ -32,20 +32,26 @@ func roll(number_of_dices: int) -> void:
 		add_child(new_dice)
 		new_dice.translation = Vector3( #TODO: change this magic numbers to calculated values
 									rand_range(-7.3, 7.3),
-									rand_range(0.6, 9.4),
+									rand_range(0.6, 3.0),
 									rand_range(-4.3, 4.3)
 								)
 		new_dice.connect(\"sleeping_state_changed\", self, \"dice_sleeping_state_changed\", [new_dice, d])
 		_dices.append(new_dice)
 "
 
+[sub_resource type="PhysicsMaterial" id=2]
+absorbent = true
+
 [node name="Roll" type="Spatial"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00350904, 0.00304127, -0.000781834 )
 script = SubResource( 1 )
 
 [node name="Camera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 12.6772, 0 )
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 15.8435, 0 )
+keep_aspect = 0
+projection = 1
 fov = 45.4
+size = 15.9973
 
 [node name="Sun" type="DirectionalLight" parent="."]
 transform = Transform( 0.351865, 0.790789, -0.500843, -0.0749619, 0.557147, 0.827024, 0.933044, -0.253457, 0.255319, -1.67826, 8.05445, 3.18227 )
@@ -62,6 +68,7 @@ omni_range = 17.0647
 
 [node name="Ground" parent="." instance=ExtResource( 1 )]
 transform = Transform( 8, 0, 0, 0, 1, 0, 0, 0, 5, 0, 0, 0 )
+physics_material_override = SubResource( 2 )
 
 [node name="Ceiling" parent="." instance=ExtResource( 1 )]
 transform = Transform( -8, -1.50996e-07, 0, 1.20797e-06, -1, 0, 0, 0, 5, -4.65661e-09, 10.0731, 0 )
