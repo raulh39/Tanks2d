@@ -24,3 +24,39 @@ material/0 = SubResource( 2 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 shape = SubResource( 3 )
+
+[node name="rc_1" type="RayCast" parent="."]
+visible = false
+enabled = true
+cast_to = Vector3( 0, 5, 0 )
+collision_mask = 2
+
+[node name="rc_2" type="RayCast" parent="."]
+visible = false
+enabled = true
+cast_to = Vector3( 0, 0, 5 )
+collision_mask = 2
+
+[node name="rc_3" type="RayCast" parent="."]
+visible = false
+enabled = true
+cast_to = Vector3( -5, 0, 0 )
+collision_mask = 2
+
+[node name="rc_4" type="RayCast" parent="."]
+visible = false
+enabled = true
+cast_to = Vector3( 5, 0, 0 )
+collision_mask = 2
+
+[node name="rc_5" type="RayCast" parent="."]
+visible = false
+enabled = true
+cast_to = Vector3( 0, 0, -5 )
+collision_mask = 2
+
+[node name="rc_6" type="RayCast" parent="."]
+visible = false
+enabled = true
+cast_to = Vector3( 0, -5, 0 )
+collision_mask = 2

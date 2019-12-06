@@ -17,10 +17,13 @@ func dice_sleeping_state_changed(dice: Dice, d:int)->void:
 	else:
 		_dices_rolling += 1
 	if _dices_rolling > 0: return
+	var results = []
 	for dice in _dices:
+		results.append(dice.number_shown())
 		remove_child(dice)
 		dice.queue_free()
 	_dices = []
+	print(results)
 	emit_signal(\"rolled\")
 
 
@@ -68,6 +71,7 @@ omni_range = 17.0647
 
 [node name="Ground" parent="." instance=ExtResource( 1 )]
 transform = Transform( 8, 0, 0, 0, 1, 0, 0, 0, 5, 0, 0, 0 )
+collision_layer = 2
 physics_material_override = SubResource( 2 )
 
 [node name="Ceiling" parent="." instance=ExtResource( 1 )]
