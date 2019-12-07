@@ -69,4 +69,8 @@ Learning to program in godot using the fantastic Tanks board game
 
 # Some images to clarify implementation
 
+Actual sequence:
 ![Shoot Sequence UML](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/raulh39/Tanks2d/master/shoot_sequence.uml)
+
+Wanted sequence:
+![Fixed Shoot Sequence UML](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/raulh39/Tanks2d/master/shoot_sequence_fixed.uml)
