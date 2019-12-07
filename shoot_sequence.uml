@@ -1,0 +1,48 @@
+@startuml
+
+hide footbox
+actor events as e
+participant Main as M
+participant GUI as G
+participant TankList as TL
+participant "Shooting\nTank (st)" as ST
+participant "Not Shooting\nTank (nst)" as NST
+participant "Target\nTank (tt)" as TT
+participant "Not Target\nTank (ntt)" as NTT
+
+M -> G: setPhase(SHOOT)
+M -> TL: shoot_with_tanks()
+activate TL
+group _select_tank_by_initiative()
+group _select(st, nst)
+TL -> ST: set_selectable(true)
+TL -> NST: set_selectable(true)
+ST ->o TL: vehicle_selected(st)
+TL -> ST: set_selectable(false)
+TL -> NST: set_selectable(false)
+end
+end
+TL -> ST: shooting_tank.set_shooting(true)
+e o<- TL : vehicle_about_to_shoot
+group _select_target_tank(st)
+TL -> TT: set_targetable(st)
+TL -> NTT: set_targetable(st)
+TT ->o TL: vehicle_selected
+TL -> TT: unset_targetable()
+TL -> NTT: unset_targetable()
+end
+
+TL -> ST: shooting_tank.set_shooting(false)
+TL -> ST: shoot_tank(tt)
+activate ST
+ST -> TL: get_parent().emit_signal("vehicle_shooted")
+activate TL
+TL ->o e: vehicle_shooted
+TL --> ST
+deactivate TL
+TL <-- ST
+deactivate ST
+M <-- TL
+deactivate TL
+
+@enduml
