@@ -1,7 +1,7 @@
 @startuml
 
 hide footbox
-actor events as e
+
 participant Main as M
 participant GUI as G
 participant TankList as TL
@@ -22,8 +22,15 @@ TL -> ST: set_selectable(false)
 TL -> NST: set_selectable(false)
 end
 end
+
 TL -> ST: shooting_tank.set_shooting(true)
-e o<- TL : vehicle_about_to_shoot
+M o<- TL : vehicle_about_to_shoot
+M -> G : update_shooting_tank_info(st)
+activate G
+M <--G
+deactivate G
+M --> TL
+
 group _select_target_tank(st)
 TL -> TT: set_targetable(st)
 TL -> NTT: set_targetable(st)
@@ -37,7 +44,12 @@ TL -> ST: shoot_tank(tt)
 activate ST
 ST -> TL: get_parent().emit_signal("vehicle_shooted")
 activate TL
-TL ->o e: vehicle_shooted
+TL ->o M: vehicle_shooted
+M -> G: hide_info()
+activate G
+M <--G
+deactivate G
+M --> TL
 TL --> ST
 deactivate TL
 TL <-- ST

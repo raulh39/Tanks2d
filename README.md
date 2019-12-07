@@ -67,6 +67,6 @@ Learning to program in godot using the fantastic Tanks board game
    - [ ] Tanklist and Vehicle scripts are way too big, way too convoluted
  - [ ] 3D dice rolling
 
-# Some images to clarify use
+# Some images to clarify implementation
 
 ![Shoot Sequence UML](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/raulh39/Tanks2d/master/shoot_sequence.uml)
