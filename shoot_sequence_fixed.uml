@@ -1,10 +1,10 @@
 @startuml
 
-hide footbox
-
-participant Main as M
-participant GUI as G
+title Shoot Phase
+actor Signals as S
 participant "Roll3D" as R
+participant GUI as G
+participant Main as M #aqua
 participant TankList as TL
 participant "Shooting\nTank (st)" as ST
 participant "Not Shooting\nTank (nst)" as NST
@@ -27,39 +27,55 @@ deactivate TL
 
 loop TanksList.more_to_act()
 
+M -> S: connect("mouse_entered", GUI, "show_shooter_info")
 M -> TL: select_tank_to_shoot()
 activate TL
 
-group _select_tank_by_initiative("gt")
-group _select([st, nst])
 TL -> ST: set_selectable(true)
 TL -> NST: set_selectable(true)
-ST ->o TL: vehicle_selected(st)
+
+S ->o G: mouse_entered(st)
+activate G
+G -> G : show_shooter_info(st)
+S <-- G
+deactivate G
+
+S ->o TL: vehicle_selected(st)
 TL -> ST: set_selectable(false)
 TL -> NST: set_selectable(false)
-end
-end
+
+TL -> ST: set_shooting(true)
+TL -> ST: has_acted = true
 M <-- TL: st
 deactivate TL
 
-M -> ST: set_shooting(true)
-M -> G : update_shooting_tank_info(st)
-activate G
-M <-- G
-deactivate G
+M -> S: disconnect("mouse_entered", GUI, "show_shooter_info")
+M -> S: connect("mouse_entered", GUI, "show_target_info")
 
 M->TL: select_target_tank(st)
 activate TL
 
 TL -> TT: set_targetable(st)
 TL -> NTT: set_targetable(st)
-TT ->o TL: vehicle_selected
+
+
+S ->o G: mouse_entered(tt)
+activate G
+G -> G: show_target_info(tt)
+S <-- G
+deactivate G
+
+
+
+S ->o TL: vehicle_selected(tt)
 TL -> TT: unset_targetable()
 TL -> NTT: unset_targetable()
+TL -> ST: set_shooting(false)
 M <-- TL: tt
 deactivate TL
 
-M -> ST: set_shooting(false)
+M -> S: disconnect("mouse_entered", GUI, "show_target_info")
+
 
 M->R: roll(st.dices)
 activate R
@@ -75,12 +91,6 @@ M -> G: hide_info()
 activate G
 M <-- G
 deactivate G
-
-M -> TL: mark_tank_as_acted(st)
-activate TL
-TL -> ST: has_acted = true
-M <-- TL
-deactivate TL
 
 end
 @enduml

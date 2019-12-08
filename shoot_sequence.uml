@@ -1,5 +1,5 @@
 @startuml
-
+title Shoot Phase
 hide footbox
 
 participant Main as M
@@ -21,7 +21,7 @@ TL -> NTT: has_acted = false
 end
 loop _more_to_act()
 
-group _select_tank_by_initiative()
+group _select_tank_by_initiative("gt")
 group _select(st, nst)
 TL -> ST: set_selectable(true)
 TL -> NST: set_selectable(true)
@@ -42,6 +42,17 @@ M --> TL
 group _select_target_tank(st)
 TL -> TT: set_targetable(st)
 TL -> NTT: set_targetable(st)
+
+NTT -> TL: get_parent().emit_signal("mouse_entered_target_vehicle", self)
+activate TL
+TL ->o M: mouse_entered_target_vehicle(tt)
+M -> G: show_info(tt)
+activate G
+M <--G
+deactivate G
+M --> TL
+deactivate TL
+
 TT ->o TL: vehicle_selected
 TL -> TT: unset_targetable()
 TL -> NTT: unset_targetable()

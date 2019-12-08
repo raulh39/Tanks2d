@@ -1,0 +1,62 @@
+@startuml
+title Movement Phase
+
+hide footbox
+
+participant Main as M
+participant GUI as G
+participant TankList as TL
+participant "Moving\nTank (mt)" as MT
+participant "Arrow" as A
+participant "Not Moving\nTank (nmt)" as NMT
+
+M -> G: setPhase(MOVE)
+M -> TL: move_tanks()
+activate TL
+group _reset_acted()
+TL -> MT: has_acted = false
+TL -> NMT: has_acted = false
+end
+
+loop _more_to_act()
+
+group _select_tank_by_initiative("lt")
+group _select(mt, nmt)
+TL -> MT: set_selectable(true)
+TL -> NMT: set_selectable(true)
+MT ->o TL: vehicle_selected(st)
+TL -> MT: set_selectable(false)
+TL -> NMT: set_selectable(false)
+end
+end
+
+TL -> MT: move_tank(mt)
+activate MT
+create A
+MT->A: instance
+MT->A: move()
+activate A
+
+loop number of arrows placements
+note right of A: _status = POSITIONING_ARROW
+A ->o A: arrow_accepted
+note right of A: _status = POSITIONING_TANK
+A -> A: _reparent_tank_under_arrow()
+A ->o A: arrow_accepted
+A -> A: _reparent_tank_over_arrow()
+end
+note right of A: _status = INACTIVE
+MT <-- A
+
+destroy A
+
+TL <-- MT
+deactivate MT
+
+TL -> MT: has_acted = true
+end
+
+M <-- TL
+deactivate TL
+
+@enduml

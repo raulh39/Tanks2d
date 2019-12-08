@@ -68,7 +68,11 @@ Learning to program in godot using the fantastic Tanks board game
  - [x] 3D dice rolling
 
 # Some images to clarify implementation
+## Movement phase
+UML sequence diagram:
+![Movement Sequence UML](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/raulh39/Tanks2d/master/movement_sequence.uml)
 
+## Shoot phase
 Actual sequence:
 ![Shoot Sequence UML](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/raulh39/Tanks2d/master/shoot_sequence.uml)
 
