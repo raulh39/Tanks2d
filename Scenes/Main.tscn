@@ -66,8 +66,4 @@ own_world = true
 render_target_v_flip = true
 
 [node name="Roll" parent="Viewport" instance=ExtResource( 9 )]
-[connection signal="mouse_entered_target_vehicle" from="TankList" to="." method="_on_TankList_mouse_entered_target_vehicle"]
-[connection signal="mouse_exited_target_vehicle" from="TankList" to="." method="_on_TankList_mouse_exited_target_vehicle"]
-[connection signal="vehicle_about_to_shoot" from="TankList" to="." method="_on_TankList_vehicle_about_to_shoot"]
-[connection signal="vehicle_shooted" from="TankList" to="." method="_on_TankList_vehicle_shooted"]
 [connection signal="rolled" from="Viewport/Roll" to="." method="_on_Roll_rolled"]

@@ -1,17 +1,5 @@
 extends Node2D
 
-signal vehicle_selected(tank)
-signal vehicle_about_to_shoot(shooting_tank)
-signal vehicle_shooted
-signal mouse_entered_target_vehicle(vehicle)
-signal mouse_exited_target_vehicle(vehicle)
-
-func _ready():
-	for i in get_children():
-		if i is Vehicle:
-			var v := (i as Vehicle)
-			v.connect("vehicle_selected", self, "_vehicle_selected")
-
 #------------------
 # Tanks come into play in initiative order. In the movement phase they go from 
 # lower initiative to higher but in the shooting phase they go from higher to 
@@ -25,25 +13,28 @@ static func lt(x:int , y: int) -> bool:
 static func gt(x:int , y: int) -> bool:
     return x > y
 
-#-----------------------------------------
-# Tanks movement
-#-----------------------------------------
-func move_tanks() -> void:
-	_reset_acted()
-	while _more_to_act():
-		var tank:Vehicle = yield(_select_tank_by_initiative(funcref(self, "lt")), "completed")
-		yield(tank.move_tank(), "completed")
-		tank.has_acted = true
 
-func _reset_acted()->void:
+#-----------------------------------------
+# Functions that handle has_acted
+#-----------------------------------------
+func reset_tanks()->void:
 	for i in get_children():
 		(i as Vehicle).has_acted = false
 
-func _more_to_act() -> bool:
+func more_to_act() -> bool:
 	for i in get_children():
 		if not (i as Vehicle).has_acted:
 			return true
 	return false
+
+#-----------------------------------------
+# Tanks movement
+#-----------------------------------------
+func select_and_move_one_tank() -> void:
+	var tank:Vehicle = yield(_select_tank_by_initiative(funcref(self, "lt")), "completed")
+	yield(tank.move_tank(), "completed")
+	tank.has_acted = true
+
 
 #----------------
 # Tanks are selected in initiative order. If only one has the greatest (or 
@@ -86,7 +77,7 @@ func _get_next_group_to_act(comparator: FuncRef) -> Array:
 func _select(tanks_allowed_to_act: Array)->void:
 	for i in tanks_allowed_to_act:
 		(i as Vehicle).set_selectable(true)
-	var vehicle = yield(self, "vehicle_selected")
+	var vehicle = yield(Signals, "vehicle_selected")
 	for i in tanks_allowed_to_act:
 		(i as Vehicle).set_selectable(false)
 	return vehicle
@@ -98,30 +89,27 @@ func _vehicle_selected(vehicle):
 #-----------------------------------------
 # Tanks shooting
 #-----------------------------------------
-func shoot_with_tanks() -> void:
-	_reset_acted()
-	while _more_to_act():
-		var shooting_tank:Vehicle = yield(_select_tank_by_initiative(funcref(self, "gt")), "completed")
-		shooting_tank.set_shooting(true)
-		emit_signal("vehicle_about_to_shoot", shooting_tank)
-		var target_tank:Vehicle = yield(_select_target_tank(shooting_tank), "completed")
-		shooting_tank.set_shooting(false)
-		yield(shooting_tank.shoot_tank(target_tank), "completed")
-		shooting_tank.has_acted = true
+func select_tank_to_shoot() -> Vehicle:
+	var shooting_tank:Vehicle = yield(_select_tank_by_initiative(funcref(self, "gt")), "completed")
+	shooting_tank.set_shooting(true)
+	shooting_tank.has_acted = true
+	return shooting_tank
 
 #Needed to handle input "ui_cancel"
 var _waiting_to_select_target: bool
 
 func _input(event: InputEvent)->void:
 	if _waiting_to_select_target and event.is_action_released("ui_cancel"):
-		emit_signal("vehicle_selected", null)
+		Signals.emit_signal("vehicle_selected", null)
 
-func _select_target_tank(shooting_tank:Vehicle) -> Vehicle:
+func select_target_tank(shooting_tank:Vehicle) -> Vehicle:
 	_set_targetable_tanks(shooting_tank, true)
 	_waiting_to_select_target = true
-	var vehicle = yield(self, "vehicle_selected")
+	var vehicle = yield(Signals, "vehicle_selected")
 	_waiting_to_select_target = false
 	_set_targetable_tanks(shooting_tank, false)
+	shooting_tank.set_shooting(false)
+	shooting_tank.clean_vision_artifacts()
 	return vehicle
 
 func _set_targetable_tanks(shooting_tank:Vehicle, set:bool) -> void:

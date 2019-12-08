@@ -47,20 +47,18 @@ var _can_be_selected_as_a_target := false
 
 onready var hull = $Hull
 
-signal vehicle_selected(vehicle)
-
 #-------------------------------------------
 # Mouse in/out functions
 #-------------------------------------------
 func _on_Vehicle_mouse_entered():
 	($Hull as CanvasItem).modulate = Color.yellow
 	if _can_be_selected_as_a_target:
-		get_parent().emit_signal("mouse_entered_target_vehicle", self)
+		Signals.emit_signal("mouse_entered", self)
 
 func _on_Vehicle_mouse_exited():
 	($Hull as CanvasItem).modulate = Color.white
 	if _can_be_selected_as_a_target:
-		get_parent().emit_signal("mouse_exited_target_vehicle", self)
+		Signals.emit_signal("mouse_exited", self)
 
 #-------------------------------------------
 # Functions dealing with tank state (selecting, targeting and shooting)
@@ -217,7 +215,7 @@ func _draw_target_cross(global_dest_position: Vector2, is_in_cover: bool) -> voi
 	if is_in_cover:
 		target_cross.modulate = Color(1,0,0)
 
-func _clean_vision_artifacts() -> void:
+func clean_vision_artifacts() -> void:
 	for i in $VisionArtifacts.get_children():
 		$VisionArtifacts.remove_child(i)
 		i.queue_free()
@@ -233,17 +231,6 @@ func move_tank():
 	a.unit_offset = 0.4 #So the arrow appear in the front side
 	yield(a.move(self), "completed")
 	a.queue_free()
-
-#-------------------------------------------
-# Shoot
-#-------------------------------------------
-func shoot_tank(target_tank: Vehicle):
-	var time_out := 1.0
-	if not target_tank:
-		time_out = 0.05
-	yield(get_tree().create_timer(time_out), "timeout")
-	_clean_vision_artifacts()
-	get_parent().emit_signal("vehicle_shooted")
 
 #-------------------------------------------
 # Command
@@ -285,7 +272,7 @@ func _input_event(viewport: Object, event: InputEvent, shape_idx: int) -> void:
 		return
 	var evt : InputEventMouseButton = (event as InputEventMouseButton)
 	if evt.button_index == BUTTON_LEFT and not evt.pressed:
-		emit_signal("vehicle_selected", self)
+		Signals.emit_signal("vehicle_selected", self)
 
 #-------------------------------------------
 # Handling of overlapping (used by Arrow.gd)

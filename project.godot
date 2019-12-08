@@ -48,6 +48,10 @@ config/name="Tanks2d"
 run/main_scene="res://Scenes/Menu.tscn"
 config/icon="res://Assets/icon.png"
 
+[autoload]
+
+Signals="*res://Code/Signals.gd"
+
 [debug]
 
 gdscript/warnings/unused_variable=false

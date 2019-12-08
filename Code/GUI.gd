@@ -17,13 +17,15 @@ func setPhase(new_phase: int) -> void:
 		Phases.COMMAND:
 			_phase_label.text = "Command Phase"
 
-func update_shooting_tank_info(shooting_tank: Vehicle) -> void:
+func update_shooter_info(shooting_tank: Vehicle) -> void:
+
 	_container.update_shooting_info(shooting_tank)
 
-func show_info(target_tank: Vehicle)->void:
+func show_target_info(target_tank: Vehicle)->void:
 	_container.update_target_info(target_tank)
 	_container.visible = true
 
-func hide_info():
+# warning-ignore:unused_argument
+func hide_info(target_tank: Vehicle)->void:
 	_container.visible = false
 	rect_size.y = _min_y_rect_size
