@@ -61,8 +61,8 @@ Learning to program in godot using the fantastic Tanks board game
    - [ ] HUD: better checkboxes
    - [ ] HUD: use bars instead of numbers
  - [ ] CODE Refactor
-   - [ ] Signal hell: to many, wired too weird, some using coroutines, some not (see https://youtu.be/S6PbC4Vqim4?t=381)
-   - [ ] Extract some code to "library" ("Autoload" in Project Settings). For example: Game State
+   - [x] Signal hell: to many, wired too weird, some using coroutines, some not (see https://youtu.be/S6PbC4Vqim4?t=381)
+   - [x] Extract some code to "library" ("Autoload" in Project Settings). For example: Game State
    - [ ] Attack and defense dice calculations should be done in its own Node.
    - [ ] Tanklist and Vehicle scripts are way too big, way too convoluted
  - [x] 3D dice rolling
